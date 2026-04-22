@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Circuits & Systems — Viva Questions</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #080f17;
+    --panel: #0b1520;
+    --border: #0f2a3f;
+    --accent: #00e5ff;
+    --accent2: #00ff9d;
+    --accent3: #ff6b35;
+    --text: #b8d4e8;
+    --text-dim: #4a7a9b;
+    --heading: #e0f4ff;
+    --glow: rgba(0,229,255,0.15);
+    --glow2: rgba(0,255,157,0.1);
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Orbitron', monospace;
+    --body: 'Exo 2', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ─── Circuit Background ─────────────────────────────────────────── */
+  .circuit-bg {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    opacity: 0.07;
+  }
+  .circuit-bg svg { width: 100%; height: 100%; }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 1;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* ─── Layout ─────────────────────────────────────────────────────── */
+  .wrapper { position: relative; z-index: 2; display: flex; min-height: 100vh; }
+
+  /* ─── Sidebar ─────────────────────────────────────────────────────── */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--bg);
+  }
+
+  .sidebar-header {
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0a1929 0%, var(--bg2) 100%);
+  }
+
+  .sidebar-header .logo {
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo-dot { width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
+  .sidebar-header h2 {
+    font-family: var(--display);
+    font-size: 13px;
+    color: var(--heading);
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1.4;
+  }
+
+  .exp-nav { padding: 12px 0; flex: 1; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+  }
+  .nav-item:hover, .nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: linear-gradient(90deg, var(--glow), transparent);
+  }
+  .nav-item .num {
+    font-family: var(--display);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent3);
+    min-width: 22px;
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.3);
+    padding: 2px 4px;
+    border-radius: 3px;
+    text-align: center;
+  }
+  .nav-item.active .num { color: var(--accent); background: var(--glow); border-color: var(--accent); }
+  .nav-item span { line-height: 1.3; }
+
+  /* ─── Main Content ────────────────────────────────────────────────── */
+  .main { flex: 1; padding: 0; }
+
+  /* ─── Hero ─────────────────────────────────────────────────────────── */
+  .hero {
+    padding: 60px 60px 50px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #040d18 0%, #071422 50%, #040d18 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%; left: 20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,255,157,0.04) 0%, transparent 70%);
+  }
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--accent2);
+    box-shadow: 0 0 8px var(--accent2);
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    color: var(--heading);
+    letter-spacing: 2px;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    text-shadow: 0 0 40px rgba(0,229,255,0.3);
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--text-dim);
+    max-width: 600px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .hero-stats {
+    display: flex; gap: 32px; margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-num {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    text-shadow: 0 0 20px var(--accent);
+  }
+  .stat-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 2px; }
+
+  /* ─── Content Area ─────────────────────────────────────────────────── */
+  .content { padding: 40px 60px 80px; }
+
+  /* ─── Experiment Section ───────────────────────────────────────────── */
+  .exp-section {
+    margin-bottom: 48px;
+    animation: fadeSlideIn 0.4s ease both;
+  }
+  .exp-section:nth-child(1) { animation-delay: 0.05s; }
+  .exp-section:nth-child(2) { animation-delay: 0.1s; }
+  .exp-section:nth-child(3) { animation-delay: 0.15s; }
+
+  .exp-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 20px 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+  .exp-header:hover { border-left-color: var(--accent2); }
+  .exp-header::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--glow) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .exp-num-badge {
+    font-family: var(--display);
+    font-size: 10px;
+    font-weight: 900;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 4px 8px;
+    border-radius: 2px;
+    min-width: 36px;
+    text-align: center;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    box-shadow: 0 0 12px rgba(0,229,255,0.4);
+  }
+
+  .exp-title-block { flex: 1; }
+  .exp-sub { font-family: var(--mono); font-size: 10px; color: var(--accent3); letter-spacing: 2px; margin-bottom: 4px; }
+  .exp-title {
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: 1px;
+    line-height: 1.4;
+  }
+  .exp-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .toggle-icon {
+    font-size: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.3s;
+    margin-top: 2px;
+    font-family: var(--mono);
+  }
+  .exp-header.open .toggle-icon { transform: rotate(45deg); }
+
+  /* ─── QA Container ───────────────────────────────────────────────── */
+  .qa-container {
+    display: none;
+    gap: 0;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-top: none;
+    background: var(--bg2);
+  }
+  .qa-container.open { display: flex; }
+
+  .qa-item {
+    border-bottom: 1px solid rgba(15,42,63,0.6);
+    overflow: hidden;
+  }
+  .qa-item:last-child { border-bottom: none; }
+
+  .q-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .q-row:hover { background: rgba(0,229,255,0.04); }
+
+  .q-num {
+    font-family: var(--display);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--accent3);
+    min-width: 28px;
+    padding-top: 2px;
+    letter-spacing: 1px;
+  }
+
+  .q-text {
+    font-size: 13.5px;
+    color: var(--text);
+    font-weight: 400;
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  .q-arrow {
+    font-family: var(--mono);
+    color: var(--text-dim);
+    font-size: 12px;
+    flex-shrink: 0;
+    transition: all 0.3s;
+    padding-top: 2px;
+  }
+  .qa-item.open .q-arrow { color: var(--accent2); transform: rotate(90deg); }
+
+  .a-row {
+    display: none;
+    padding: 0 20px 16px 60px;
+    border-top: 1px solid rgba(0,229,255,0.07);
+    background: linear-gradient(135deg, rgba(0,229,255,0.03) 0%, transparent 100%);
+  }
+  .a-row.open { display: block; }
+
+  .a-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    margin-top: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .a-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent2), transparent); opacity: 0.3; }
+
+  .a-text {
+    font-size: 13px;
+    color: #8bb8d4;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .a-text strong { color: var(--accent); font-weight: 600; font-family: var(--mono); font-size: 12px; }
+  .a-text .formula {
+    display: inline-block;
+    background: rgba(0,229,255,0.08);
+    border: 1px solid rgba(0,229,255,0.2);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    margin: 2px 4px;
+  }
+  .a-text ul { margin: 8px 0 8px 20px; }
+  .a-text ul li { margin-bottom: 4px; }
+
+  /* ─── Tags / Category Badges ──────────────────────────────────────── */
+  .tag-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; padding: 0 2px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .tag-matlab { background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.3); color: var(--accent3); }
+  .tag-signals { background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.25); color: var(--accent); }
+  .tag-circuits { background: rgba(0,255,157,0.08); border: 1px solid rgba(0,255,157,0.25); color: var(--accent2); }
+  .tag-networks { background: rgba(180,100,255,0.08); border: 1px solid rgba(180,100,255,0.25); color: #c084fc; }
+  .tag-systems { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25); color: #fbbf24; }
+
+  /* ─── Search Bar ────────────────────────────────────────────────────── */
+  .search-bar-wrap {
+    padding: 24px 60px 0;
+    display: flex; gap: 16px; align-items: center;
+  }
+  .search-bar {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 12px 18px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.5px;
+    border-radius: 2px;
+  }
+  .search-bar::placeholder { color: var(--text-dim); }
+  .search-bar:focus { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 20px var(--glow); }
+  .search-count {
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim); white-space: nowrap;
+  }
+
+  /* ─── Section Divider ─────────────────────────────────────────────── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), var(--accent), var(--border));
+    margin: 48px 0;
+    opacity: 0.5;
+  }
+
+  /* ─── Animations ─────────────────────────────────────────────────── */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 4px var(--accent2); }
+    50% { opacity: 0.3; box-shadow: none; }
+  }
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes flicker {
+    0%, 96%, 100% { opacity: 1; }
+    97% { opacity: 0.6; }
+    98% { opacity: 1; }
+    99% { opacity: 0.7; }
+  }
+  .hero h1 { animation: flicker 8s infinite; }
+
+  /* ─── Footer ─────────────────────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    background: var(--bg2);
+  }
+
+  /* ─── Scrollbar ─────────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ─── Responsive ────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .hero { padding: 40px 24px 32px; }
+    .content { padding: 24px 20px 60px; }
+    .search-bar-wrap { padding: 20px 20px 0; }
+    .hero-stats { gap: 20px; }
+  }
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 22px; }
+  }
+
+  /* ─── Expand All Btn ──────────────────────────────────────────── */
+  .ctrl-bar {
+    display: flex; gap: 12px; align-items: center;
+    padding: 16px 60px 0;
+    flex-wrap: wrap;
+  }
+  .ctrl-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+  .ctrl-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--glow); }
+  .ctrl-btn.active { border-color: var(--accent2); color: var(--accent2); background: var(--glow2); }
+  @media (max-width: 900px) {
+    .ctrl-bar { padding: 16px 20px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Circuit background SVG -->
+<div class="circuit-bg">
+<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <g stroke="#00e5ff" stroke-width="1" fill="none">
+    <path d="M0 150 H200 V80 H400 V150 H700"/>
+    <path d="M700 150 H900 V250 H1100 V150 H1400"/>
+    <path d="M0 400 H100 V350 H300 V400 H600 V320 H800"/>
+    <path d="M800 320 H1000 V400 H1400"/>
+    <path d="M200 900 V700 H350 V600 H550 V700 H750 V550 H950 V700 H1150 V800 H1400"/>
+    <path d="M0 600 H150 V700 H300"/>
+    <!-- Nodes/pads -->
+    <circle cx="200" cy="150" r="4" fill="#00e5ff" opacity="0.8"/>
+    <circle cx="400" cy="150" r="4" fill="#00e5ff" opacity="0.8"/>
+    <circle cx="700" cy="150" r="4" fill="#00e5ff" opacity="0.8"/>
+    <circle cx="100" cy="400" r="4" fill="#00ff9d" opacity="0.8"/>
+    <circle cx="300" cy="400" r="4" fill="#00ff9d" opacity="0.8"/>
+    <circle cx="800" cy="320" r="4" fill="#00e5ff" opacity="0.8"/>
+    <circle cx="550" cy="600" r="4" fill="#00ff9d" opacity="0.8"/>
+    <circle cx="950" cy="700" r="4" fill="#00e5ff" opacity="0.8"/>
+    <!-- ICs -->
+    <rect x="380" y="60" width="40" height="40" rx="2" opacity="0.4"/>
+    <rect x="880" y="230" width="40" height="40" rx="2" opacity="0.4"/>
+    <rect x="730" y="530" width="40" height="40" rx="2" opacity="0.4"/>
+    <!-- Resistor symbols -->
+    <path d="M470 150 h5 l3-6 l6 12 l6-12 l6 12 l6-12 l3 6 h5" stroke="#00e5ff" opacity="0.5"/>
+    <path d="M500 400 h5 l3-6 l6 12 l6-12 l6 12 l6-12 l3 6 h5" stroke="#00ff9d" opacity="0.5"/>
+  </g>
+</svg>
+</div>
+
+<div class="wrapper">
+
+<!-- ─── Sidebar ──────────────────────────────────────────────────────── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo"><div class="logo-dot"></div>EXP NAVIGATOR</div>
+    <h2>Circuits &<br/>Systems Lab</h2>
+  </div>
+  <div class="exp-nav" id="expNav">
+    <a class="nav-item" href="#exp1" onclick="setActive(this)"><span class="num">E01</span><span>Intro to MATLAB</span></a>
+    <a class="nav-item" href="#exp2" onclick="setActive(this)"><span class="num">E02</span><span>Signal Plotting</span></a>
+    <a class="nav-item" href="#exp3" onclick="setActive(this)"><span class="num">E03</span><span>Linear Convolution</span></a>
+    <a class="nav-item" href="#exp4" onclick="setActive(this)"><span class="num">E04</span><span>Series RLC Transient</span></a>
+    <a class="nav-item" href="#exp5" onclick="setActive(this)"><span class="num">E05</span><span>Linear System Response</span></a>
+    <a class="nav-item" href="#exp6" onclick="setActive(this)"><span class="num">E06</span><span>Z & Y Parameters</span></a>
+    <a class="nav-item" href="#exp7" onclick="setActive(this)"><span class="num">E07</span><span>ABCD Parameters</span></a>
+    <a class="nav-item" href="#exp8" onclick="setActive(this)"><span class="num">E08</span><span>AC Circuit Theorems</span></a>
+    <a class="nav-item" href="#exp9" onclick="setActive(this)"><span class="num">E09</span><span>Hybrid h-Parameters</span></a>
+    <a class="nav-item" href="#exp10" onclick="setActive(this)"><span class="num">E10</span><span>Cascade Connection</span></a>
+    <a class="nav-item" href="#exp11" onclick="setActive(this)"><span class="num">E11</span><span>Series-Series (Z)</span></a>
+    <a class="nav-item" href="#exp12" onclick="setActive(this)"><span class="num">E12</span><span>Parallel-Parallel (Y)</span></a>
+    <a class="nav-item" href="#exp13" onclick="setActive(this)"><span class="num">E13</span><span>Series-Parallel (h)</span></a>
+  </div>
+</nav>
+
+<!-- ─── Main ──────────────────────────────────────────────────────────── -->
+<main class="main">
+  <div class="hero">
+    <div class="hero-tag">Viva Preparation Guide</div>
+    <h1>Circuits & <span>Systems</span><br/>Lab Viva Questions</h1>
+    <p class="hero-sub">Comprehensive viva voce questions with detailed answers for all 13 experiments. For MY CUTIE ~ From HER HAMSTER ;) Click any question to reveal the answer.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">13</div><div class="stat-label">Experiments</div></div>
+      <div class="stat"><div class="stat-num" id="totalQ">130+</div><div class="stat-label">Viva Questions</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Topic Areas</div></div>
+    </div>
+  </div>
+
+  <div class="search-bar-wrap">
+    <input class="search-bar" type="text" id="searchInput" placeholder="// search questions...  e.g. 'damping ratio', 'Z parameters', 'convolution'"/>
+    <span class="search-count" id="searchCount"></span>
+  </div>
+
+  <div class="ctrl-bar">
+    <button class="ctrl-btn" onclick="expandAll()">▸ Expand All</button>
+    <button class="ctrl-btn" onclick="collapseAll()">▾ Collapse All</button>
+  </div>
+
+  <div class="content" id="mainContent">
+
+<!-- ═══════════════════════════ EXP 1 ════════════════════════════════ -->
+<div class="exp-section" id="exp1">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E01</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 01 · SOFTWARE TOOL</div>
+    <div class="exp-title">Introduction to MATLAB and its Basic Commands</div>
+  </div>
+  <div class="exp-count">12 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is MATLAB? What does the acronym stand for?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">MATLAB stands for <strong>MATrix LABoratory</strong>. It is a high-performance numerical computing environment and programming language developed by MathWorks. It integrates computation, visualization, and programming in an easy-to-use environment where problems and solutions are expressed in familiar mathematical notation. It is widely used for algorithm development, data analysis, simulation, and scientific computing.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">What is the difference between a script and a function in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A <strong>Script</strong> is a file containing a sequence of MATLAB commands. It operates on the base workspace and does not accept input arguments or return output values. A <strong>Function</strong> is also an M-file but it has its own local workspace, accepts input arguments, returns output values, and the variables created inside a function are not accessible outside it. Functions begin with the keyword <span class="formula">function</span> and must be saved with the same name as the function.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">What is the purpose of clc, clear, and close all commands?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>clc</strong> — Clears the Command Window display (does not delete variables).<br/><strong>clear</strong> or <strong>clear all</strong> — Removes all variables from the workspace memory.<br/><strong>close all</strong> — Closes all open figure windows. These three commands are typically used together at the beginning of a program to ensure a clean environment for execution.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">What is the difference between .* (dot multiply) and * (matrix multiply) in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><span class="formula">*</span> performs <strong>matrix multiplication</strong> (following linear algebra rules, inner dimensions must match). <span class="formula">.*</span> performs <strong>element-wise multiplication</strong> (corresponding elements of two arrays are multiplied; arrays must be the same size). Similarly, <span class="formula">./</span> and <span class="formula">.^</span> are element-wise division and power. Example: if A=[1 2; 3 4] and B=[5 6; 7 8], then A.*B = [5 12; 21 32] whereas A*B gives matrix product.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">What is the difference between a semicolon (;) and a comma (,) in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A <strong>semicolon (;)</strong> at the end of a statement suppresses the output (result is not displayed in the command window). Inside a matrix, it separates rows. A <strong>comma (,)</strong> separates elements in the same row of a matrix, or separates arguments in a function call. For example: <span class="formula">A = [1,2; 3,4]</span> creates a 2×2 matrix. Without the semicolon: <span class="formula">x = 5</span> prints <em>x = 5</em> on screen; with it, <span class="formula">x = 5;</span> stores silently.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">How do you create a linearly spaced vector in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Two methods: <br/><strong>Colon operator:</strong> <span class="formula">x = start:step:end</span> e.g., <span class="formula">x = 0:0.1:10</span> creates a vector from 0 to 10 with step 0.1.<br/><strong>linspace:</strong> <span class="formula">x = linspace(start, end, N)</span> creates N evenly spaced points between start and end. For example, <span class="formula">linspace(0, 2*pi, 100)</span> gives 100 points from 0 to 2π.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What are the basic plotting commands in MATLAB? How do you label axes?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Basic plotting:</strong><br/><span class="formula">plot(x, y)</span> — 2D line plot<br/><span class="formula">stem(x, y)</span> — Discrete-time sequence plot<br/><span class="formula">subplot(m,n,p)</span> — Divide figure into m×n grid<br/><strong>Labels/Annotations:</strong><br/><span class="formula">xlabel('label')</span>, <span class="formula">ylabel('label')</span>, <span class="formula">title('Title')</span>, <span class="formula">legend('name')</span>, <span class="formula">grid on</span>, <span class="formula">axis([xmin xmax ymin ymax])</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">What is the MATLAB workspace? How do you view variables in it?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>workspace</strong> is the memory space where all variables defined during a MATLAB session are stored. You can view workspace variables using the <span class="formula">whos</span> command (shows name, size, bytes, class) or <span class="formula">who</span> (shows only variable names). The Workspace browser panel in the MATLAB IDE also shows all variables graphically. Variables persist until cleared with <span class="formula">clear</span> or until the session ends.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">What are M-files in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">M-files are plain text files with the <strong>.m extension</strong> that contain MATLAB code. There are two types: <strong>Script M-files</strong> (contain sequences of commands executed in the base workspace) and <strong>Function M-files</strong> (define reusable functions with local scope). MATLAB executes M-files by reading them line by line. They can be created in the MATLAB editor and saved in the current directory or a directory on the MATLAB path.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q10</div>
+  <div class="q-text">How are loops implemented in MATLAB? Explain with examples.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">MATLAB supports <strong>for</strong> and <strong>while</strong> loops.<br/><strong>For loop:</strong> <span class="formula">for i = 1:N; statements; end</span><br/><strong>While loop:</strong> <span class="formula">while condition; statements; end</span><br/>MATLAB also supports <strong>vectorized operations</strong> which are preferred over loops for performance. For example, instead of looping to square each element, use <span class="formula">y = x.^2</span> directly. <span class="formula">break</span> exits a loop early; <span class="formula">continue</span> skips to the next iteration.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q11</div>
+  <div class="q-text">What are some important built-in mathematical functions in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Important built-in functions include:<br/>
+  <strong>Trigonometric:</strong> <span class="formula">sin()</span>, <span class="formula">cos()</span>, <span class="formula">tan()</span>, <span class="formula">atan2()</span><br/>
+  <strong>Exponential/Logarithmic:</strong> <span class="formula">exp()</span>, <span class="formula">log()</span>, <span class="formula">log10()</span>, <span class="formula">log2()</span><br/>
+  <strong>Matrix:</strong> <span class="formula">inv()</span>, <span class="formula">det()</span>, <span class="formula">eig()</span>, <span class="formula">rank()</span>, <span class="formula">trace()</span><br/>
+  <strong>Signal Processing:</strong> <span class="formula">fft()</span>, <span class="formula">conv()</span>, <span class="formula">filter()</span><br/>
+  <strong>Control:</strong> <span class="formula">tf()</span>, <span class="formula">step()</span>, <span class="formula">bode()</span>, <span class="formula">rlocus()</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q12</div>
+  <div class="q-text">What is the difference between size() and length() in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><span class="formula">size(A)</span> returns a vector <span class="formula">[m, n]</span> with the number of rows and columns of matrix A. <span class="formula">size(A,1)</span> returns number of rows; <span class="formula">size(A,2)</span> returns number of columns.<br/><span class="formula">length(A)</span> returns the size of the largest dimension, i.e., <span class="formula">max(size(A))</span>. For a vector of 100 elements, length returns 100. For a 3×5 matrix, length returns 5. <span class="formula">numel(A)</span> returns total number of elements.</div>
+</div>
+</div>
+
+</div><!-- end qa-container -->
+</div><!-- end exp1 -->
+
+<!-- ═══════════════════════════ EXP 2 ════════════════════════════════ -->
+<div class="exp-section" id="exp2">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E02</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 02 · SIGNAL ANALYSIS</div>
+    <div class="exp-title">Plot Unit Step, Impulse, Ramp, Exponential, Parabolic & Sinusoidal Signals</div>
+  </div>
+  <div class="exp-count">11 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">Define the unit step function mathematically and state its Laplace transform.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>unit step function</strong> u(t) is defined as:<br/><span class="formula">u(t) = 1, for t ≥ 0</span> &nbsp; and &nbsp; <span class="formula">u(t) = 0, for t &lt; 0</span><br/>Its Laplace transform is: <span class="formula">L{u(t)} = 1/s</span><br/>Its Z-transform (discrete): <span class="formula">Z{u[n]} = z/(z-1), |z| > 1</span><br/>In MATLAB, the unit step can be implemented using the <span class="formula">heaviside(t)</span> function, or as <span class="formula">u = (t >= 0)</span> for vectors.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">What is a unit impulse (Dirac delta) function? State its properties.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>unit impulse δ(t)</strong> (Dirac delta) is defined such that:<br/><span class="formula">δ(t) = 0, for t ≠ 0</span> and <span class="formula">∫δ(t)dt = 1 (over all time)</span><br/><strong>Properties:</strong><ul><li><strong>Sifting:</strong> <span class="formula">∫f(t)δ(t-t₀)dt = f(t₀)</span></li><li><strong>Laplace:</strong> <span class="formula">L{δ(t)} = 1</span></li><li>It is the derivative of the unit step: <span class="formula">δ(t) = du(t)/dt</span></li><li>Area = 1, duration → 0, amplitude → ∞</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">What is the relationship between unit step, unit impulse, and unit ramp signals?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">These three signals are related by integration and differentiation:<br/><span class="formula">δ(t) = d/dt [u(t)]</span> — Impulse is derivative of step<br/><span class="formula">u(t) = d/dt [r(t)]</span> — Step is derivative of ramp<br/><span class="formula">r(t) = ∫u(t)dt</span> — Ramp is integral of step<br/><span class="formula">u(t) = ∫δ(t)dt</span> — Step is integral of impulse<br/>The ramp r(t) = t·u(t); its Laplace transform is <span class="formula">1/s²</span>. The parabolic signal p(t) = (t²/2)·u(t) with Laplace transform <span class="formula">1/s³</span>.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">Define energy and power signals. Which of the standard signals are energy signals and which are power signals?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Energy Signal:</strong> A signal with finite, non-zero energy. Energy E = ∫|x(t)|² dt &lt; ∞. Power P = 0.<br/><strong>Power Signal:</strong> A signal with finite, non-zero average power. Power P = lim(T→∞) (1/2T)∫|x(t)|² dt &lt; ∞.<br/><strong>Classification:</strong><ul><li>Sinusoidal signal → <strong>Power signal</strong> (periodic, infinite duration)</li><li>Exponential decaying → <strong>Energy signal</strong> (finite energy)</li><li>Unit step, ramp → <strong>Neither</strong> strictly (infinite energy and infinite/zero power)</li><li>Rectangular pulse → <strong>Energy signal</strong></li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">What is a causal signal? Give examples.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A signal x(t) is said to be <strong>causal</strong> if x(t) = 0 for all t &lt; 0. Such signals exist only for t ≥ 0. <strong>Examples:</strong> unit step u(t), unit ramp r(t) = t·u(t), decaying exponential e^(-at)·u(t). An <strong>anti-causal</strong> signal exists for t &lt; 0. A <strong>non-causal</strong> signal exists for both t &lt; 0 and t ≥ 0. Physical systems produce causal outputs, making causal signals important in system analysis.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">What is the difference between continuous-time and discrete-time signals?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Continuous-time signals</strong> are defined for every instant of time (x(t), t ∈ ℝ). They can take any value at any time. Examples: sinusoidal signals from nature, analog voltage.<br/><strong>Discrete-time signals</strong> are defined only at specific (usually equally spaced) time instants (x[n], n ∈ ℤ). They are obtained by sampling continuous signals. In MATLAB, <span class="formula">plot()</span> is used for CT signals and <span class="formula">stem()</span> is used for DT signals. Sampling theorem (Nyquist) states sampling frequency must be ≥ 2 × max frequency.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What is a periodic signal? Define its period and frequency.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A signal x(t) is <strong>periodic</strong> if there exists a positive T such that <span class="formula">x(t+T) = x(t)</span> for all t. The smallest such T is the <strong>fundamental period</strong>. <strong>Frequency</strong> f = 1/T Hz. <strong>Angular frequency</strong> ω = 2πf = 2π/T rad/s. For sinusoidal signals: <span class="formula">x(t) = A·sin(ωt + φ)</span> where A is amplitude, ω is angular frequency, φ is phase angle. Signals that don't repeat are <strong>aperiodic</strong>.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">What are the properties of the exponential signal e^(at)?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The exponential signal x(t) = A·e^(at): <ul><li>If <strong>a &lt; 0</strong>: Decaying exponential — diminishes over time. Important in natural system responses. Example: capacitor discharge.</li><li>If <strong>a > 0</strong>: Growing exponential — increases over time (unstable systems).</li><li>If <strong>a = 0</strong>: Constant signal.</li><li>If <strong>a = jω</strong>: Complex exponential e^(jωt) = cos(ωt) + j·sin(ωt) — relates to sinusoids via Euler's formula.</li></ul>Laplace transform: <span class="formula">L{e^(-at)u(t)} = 1/(s+a)</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">How do you implement the unit step and unit impulse signals in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Unit Step:</strong><br/><span class="formula">t = -2:0.01:5;</span><br/><span class="formula">u = (t >= 0);</span><br/>or using <span class="formula">heaviside(t)</span><br/><strong>Unit Impulse (discrete approximation):</strong><br/><span class="formula">n = -3:3;</span><br/><span class="formula">delta = (n == 0);</span><br/><span class="formula">stem(n, delta);</span><br/><strong>Unit Ramp:</strong> <span class="formula">r = t .* (t >= 0);</span><br/><strong>Sinusoidal:</strong> <span class="formula">x = sin(2*pi*f*t);</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q10</div>
+  <div class="q-text">What is even and odd decomposition of a signal?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Any signal x(t) can be decomposed into:<br/><strong>Even component:</strong> <span class="formula">x_e(t) = [x(t) + x(-t)] / 2</span> — symmetric about t=0, x_e(t) = x_e(-t)<br/><strong>Odd component:</strong> <span class="formula">x_o(t) = [x(t) - x(-t)] / 2</span> — anti-symmetric, x_o(t) = -x_o(-t)<br/>Such that x(t) = x_e(t) + x_o(t). The unit step function can be written as: <span class="formula">u(t) = 1/2 + (1/2)·sgn(t)</span> where the even part is 1/2 and odd part is (1/2)·sgn(t).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q11</div>
+  <div class="q-text">What is time shifting and time scaling of signals?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Time Shifting:</strong> x(t - t₀) shifts the signal by t₀ to the right (delay); x(t + t₀) shifts left (advance).<br/><strong>Time Scaling:</strong> x(at) — if |a| > 1, signal is compressed; if 0 &lt; |a| &lt; 1, signal is expanded. If a &lt; 0, signal is time-reversed as well.<br/><strong>Time Reversal:</strong> x(-t) flips the signal about the vertical axis (t=0).<br/>In MATLAB, time shifting is achieved by replacing the time vector: <span class="formula">y = x(t - t0)</span></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 3 ════════════════════════════════ -->
+<div class="exp-section" id="exp3">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E03</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 03 · SIGNAL PROCESSING</div>
+    <div class="exp-title">Plot the Linear Convolution of Two Sequences</div>
+  </div>
+  <div class="exp-count">10 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">Define linear convolution mathematically. What does it represent physically?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>linear convolution</strong> of signals x(t) and h(t) is defined as:<br/><span class="formula">y(t) = x(t) * h(t) = ∫ x(τ)·h(t-τ) dτ</span> (continuous)<br/>For discrete sequences: <span class="formula">y[n] = Σ x[k]·h[n-k]</span> (k from -∞ to ∞)<br/><strong>Physical significance:</strong> In an LTI (Linear Time-Invariant) system, convolution of the input signal x(t) with the system's impulse response h(t) gives the output y(t). It represents how the system processes the input over time, considering the system's memory.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">If two sequences have lengths M and N, what is the length of their linear convolution?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The length of the linear convolution of two sequences of lengths M and N is:<br/><span class="formula">Length = M + N - 1</span><br/>For example, if x has 5 samples and h has 3 samples, the output y will have 5 + 3 - 1 = <strong>7 samples</strong>.<br/>In MATLAB, the <span class="formula">conv(x, h)</span> function automatically gives the output of length M+N-1. The starting index of the output is the sum of starting indices of the two sequences.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">State the properties of linear convolution.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Properties of linear convolution:<br/><strong>1. Commutative:</strong> <span class="formula">x * h = h * x</span><br/><strong>2. Associative:</strong> <span class="formula">(x * h₁) * h₂ = x * (h₁ * h₂)</span><br/><strong>3. Distributive:</strong> <span class="formula">x * (h₁ + h₂) = x*h₁ + x*h₂</span><br/><strong>4. Identity:</strong> <span class="formula">x * δ = x</span> (convolving with unit impulse returns original)<br/><strong>5. Shift:</strong> If y = x * h, then shifting x by n₀ shifts y by n₀<br/><strong>6. Width:</strong> Length of output = M + N - 1</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">What is the difference between linear convolution and circular convolution?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Linear Convolution:</strong> Output length = M+N-1. Sequences are treated as aperiodic. Used in time-domain analysis of LTI systems. MATLAB: <span class="formula">conv(x, h)</span>.<br/><strong>Circular Convolution:</strong> Output length = N (same as input length). Treats sequences as periodic with period N. Used in DFT/FFT computations. MATLAB: <span class="formula">cconv(x, h, N)</span> or via <span class="formula">ifft(fft(x).*fft(h))</span>.<br/><strong>Key fact:</strong> N-point circular convolution equals linear convolution only when N ≥ M+N-1 (i.e., sequences are zero-padded sufficiently to avoid aliasing).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">How is convolution related to the Fourier/Laplace transform?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>Convolution Theorem</strong> states that convolution in the time domain corresponds to multiplication in the frequency domain:<br/><span class="formula">x(t) * h(t) ↔ X(ω)·H(ω)</span> (Fourier Transform)<br/><span class="formula">L{x(t) * h(t)} = X(s)·H(s)</span> (Laplace Transform)<br/>This is why the transfer function H(s) = Y(s)/X(s) is valid — it is the Laplace transform of the impulse response. This theorem makes frequency-domain analysis computationally efficient compared to direct convolution.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">What is the impulse response of a system? Why is it important?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>impulse response h(t)</strong> of a system is its output when the input is a unit impulse δ(t). It completely characterizes an LTI system. <strong>Importance:</strong><ul><li>The output for any input x(t) is: <span class="formula">y(t) = x(t) * h(t)</span></li><li>If h(t) = 0 for t &lt; 0, the system is causal</li><li>If <span class="formula">∫|h(t)|dt &lt; ∞</span>, the system is BIBO stable</li><li>Its Laplace transform gives the transfer function H(s)</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What is deconvolution? Where is it used?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Deconvolution</strong> is the inverse operation of convolution. Given y = x * h and knowing y and one of x or h, deconvolution recovers the other signal. In MATLAB: <span class="formula">[q, r] = deconv(y, h)</span>. <strong>Applications:</strong><ul><li>Channel equalization in communications</li><li>Image restoration/deblurring</li><li>Seismic signal processing (recovering earth structure from reflected waves)</li><li>System identification (finding impulse response from input-output data)</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">What is an LTI system? State its properties.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">An <strong>LTI (Linear Time-Invariant) system</strong> satisfies two properties:<br/><strong>1. Linearity:</strong> Superposition holds — if x₁→y₁ and x₂→y₂, then (ax₁+bx₂)→(ay₁+by₂).<br/><strong>2. Time-Invariance:</strong> If x(t)→y(t), then x(t-t₀)→y(t-t₀). A delayed input gives a delayed but otherwise identical output.<br/>LTI systems are fully characterized by their <strong>impulse response h(t)</strong> or equivalently by their <strong>transfer function H(s)</strong>. Convolution is the fundamental operation relating input and output.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">Explain BIBO stability of a system. Give the condition in terms of impulse response.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>BIBO (Bounded Input Bounded Output) Stability:</strong> A system is BIBO stable if every bounded input produces a bounded output. Mathematically, if |x(t)| ≤ M &lt; ∞, then |y(t)| ≤ K &lt; ∞.<br/><strong>Condition in terms of h(t):</strong> An LTI system is BIBO stable if and only if its impulse response is absolutely integrable:<br/><span class="formula">∫|h(t)|dt &lt; ∞</span><br/>For discrete systems: <span class="formula">Σ|h[n]| &lt; ∞</span><br/>In the s-domain: all poles of H(s) must lie in the <strong>left half of the s-plane</strong> (real parts negative).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q10</div>
+  <div class="q-text">Write the MATLAB code to compute and plot linear convolution of x = [1, 2, 3] and h = [1, 1, 1].</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><span class="formula">x = [1, 2, 3];</span><br/><span class="formula">h = [1, 1, 1];</span><br/><span class="formula">y = conv(x, h);</span><br/><span class="formula">n = 0 : length(y)-1;</span><br/><span class="formula">stem(n, y);</span><br/><span class="formula">title('Linear Convolution');</span><br/><span class="formula">xlabel('n'); ylabel('y[n]'); grid on;</span><br/>The result will be <strong>y = [1, 3, 6, 5, 3]</strong> (length = 3+3-1 = 5). Manual verification: convolve term by term using the flip-and-slide method.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 4 ════════════════════════════════ -->
+<div class="exp-section" id="exp4">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E04</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 04 · RLC CIRCUITS</div>
+    <div class="exp-title">Transient Response of Series RLC Circuit — CRO & MATLAB Verification</div>
+  </div>
+  <div class="exp-count">12 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is the transient response of a circuit? How is it different from the steady-state response?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Transient response</strong> is the portion of the circuit's response that decays to zero over time after a disturbance (such as switching). It arises due to energy stored in inductors and capacitors.<br/><strong>Steady-state response</strong> is the response remaining after the transient has died out — it persists indefinitely and depends on the input type.<br/>The <strong>total response</strong> = Transient (natural/complementary) + Steady-state (forced/particular).<br/>Transient duration depends on the time constants of the circuit.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">Derive the characteristic equation of a series RLC circuit. What is the natural frequency and damping ratio?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a series RLC circuit with voltage v(t) applied, applying KVL:<br/><span class="formula">L(d²i/dt²) + R(di/dt) + (1/C)i = dv/dt</span><br/>Dividing by L, the <strong>characteristic equation</strong> in s-domain is:<br/><span class="formula">s² + (R/L)s + 1/(LC) = 0</span><br/><strong>Natural frequency:</strong> <span class="formula">ωₙ = 1/√(LC)</span> rad/s<br/><strong>Damping ratio:</strong> <span class="formula">ζ = R/(2)·√(C/L) = R/(2ωₙL)</span><br/>Roots: <span class="formula">s₁,₂ = -ζωₙ ± ωₙ√(ζ²-1)</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">Define overdamped, underdamped, and critically damped conditions. What are the waveforms observed on CRO?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>1. Overdamped (ζ > 1):</strong> Two distinct real negative roots. Response decays exponentially without oscillations. Slow to reach steady state. <strong>CRO shows:</strong> smooth exponential decay.<br/><strong>2. Critically Damped (ζ = 1):</strong> Two equal real negative roots. Fastest non-oscillatory decay. <strong>CRO shows:</strong> exponential decay, fastest approach to final value.<br/><strong>3. Underdamped (ζ &lt; 1):</strong> Complex conjugate roots with negative real parts. Response oscillates while decaying. <strong>CRO shows:</strong> damped sinusoidal waveform with overshoot.<br/><strong>Undamped (ζ = 0):</strong> Pure imaginary roots, sustained oscillation.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">What is resonance in a series RLC circuit? Define resonant frequency and Q factor.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Resonance</strong> occurs when inductive reactance equals capacitive reactance: <span class="formula">ωL = 1/(ωC)</span>.<br/><strong>Resonant frequency:</strong> <span class="formula">ω₀ = 1/√(LC)</span> → <span class="formula">f₀ = 1/(2π√(LC))</span><br/>At resonance, impedance is purely resistive (Z = R), and current is maximum (I = V/R).<br/><strong>Quality factor Q:</strong> <span class="formula">Q = ω₀L/R = 1/(ω₀CR) = (1/R)√(L/C)</span><br/>Q represents the sharpness of resonance. High Q → narrow bandwidth, high selectivity. <strong>Bandwidth:</strong> <span class="formula">BW = f₀/Q = R/(2πL)</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">What is the time constant of a series RLC circuit?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>time constant τ</strong> governs how quickly the transient decays. For an RLC circuit:<br/><span class="formula">τ = 1/(ζωₙ) = 2L/R</span><br/>The damping coefficient (Neper frequency): <span class="formula">α = R/(2L) = ζωₙ</span><br/>The transient dies out in approximately 5τ (5 time constants). For overdamped systems, two time constants exist: τ₁ = 1/|s₁| and τ₂ = 1/|s₂|. The larger time constant dominates the long-term behavior. For a simple RC circuit: τ = RC; for RL circuit: τ = L/R.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">What is a CRO (Cathode Ray Oscilloscope)? How is it used to observe transient response?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A <strong>CRO (Cathode Ray Oscilloscope)</strong> is an electronic test instrument that displays signal voltage as a function of time on its screen. To observe RLC transient response:<ul><li>Apply a <strong>square wave</strong> input (which provides periodic step excitation) to the RLC circuit</li><li>Connect the output voltage across the capacitor or resistor to the CRO probe</li><li>Adjust <strong>time/div</strong> (timebase) to display the transient portion</li><li>Adjust <strong>volts/div</strong> to get appropriate amplitude</li><li>Use trigger to synchronize the display</li></ul>Square wave is preferred because it provides repeated step inputs, making the transient observable periodically.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">How do you simulate the transient response of a series RLC circuit in MATLAB?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><span class="formula">R=10; L=0.1; C=100e-6;</span><br/><span class="formula">wn = 1/sqrt(L*C);</span><br/><span class="formula">zeta = R/(2*sqrt(L/C));</span><br/><span class="formula">num = [wn^2];</span><br/><span class="formula">den = [1, 2*zeta*wn, wn^2];</span><br/><span class="formula">sys = tf(num, den);</span><br/><span class="formula">step(sys);</span><br/>Or using <span class="formula">impulse(sys)</span> for impulse response. The <span class="formula">lsim(sys, u, t)</span> function can simulate response to any arbitrary input u.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">What effect does increasing resistance R have on the transient response of a series RLC circuit?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Increasing R increases the <strong>damping ratio ζ = R/(2√(L/C))</strong>:<ul><li>Larger R → larger ζ → more damping</li><li>At small R: underdamped (oscillatory) response</li><li>At R = 2√(L/C): critical damping (ζ = 1), fastest non-oscillatory response</li><li>At large R: overdamped (slow, exponential) response</li></ul>Increasing R also reduces the Q factor and increases bandwidth. It <strong>dissipates more energy</strong>, reducing oscillation amplitude and frequency. The natural frequency ωₙ = 1/√(LC) is independent of R; only the damping changes.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">What is damped natural frequency? How is it related to the natural frequency?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>damped natural frequency ωd</strong> is the actual frequency of oscillation observed in the underdamped transient response:<br/><span class="formula">ωd = ωₙ√(1 - ζ²)</span><br/>It is always less than the natural frequency ωₙ. The underdamped response can be written as:<br/><span class="formula">v(t) = A·e^(-ζωₙt)·sin(ωdt + φ)</span><br/>As ζ → 0: ωd → ωₙ (undamped oscillation). As ζ → 1: ωd → 0 (critical damping, no oscillation). This frequency is directly observable on the CRO as the frequency of the ringing waveform.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q10</div>
+  <div class="q-text">Why is a square wave used as input to study transient response instead of a step input?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A <strong>square wave</strong> is used because:<ul><li>A true DC step can only trigger the transient once, making it hard to observe on a CRO without a storage feature</li><li>A square wave provides <strong>periodic step excitations</strong> — each rising and falling edge triggers a transient response, allowing the CRO to synchronize and repeatedly display the same transient</li><li>The frequency must be chosen low enough that the transient decays completely before the next edge — typically f &lt;&lt; 1/(5τ)</li></ul>Mathematically, each half-cycle of the square wave is equivalent to an independent step input to the circuit.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q11</div>
+  <div class="q-text">Define the critical resistance of a series RLC circuit.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>critical resistance Rc</strong> is the value of R at which the circuit becomes critically damped (ζ = 1). Setting ζ = 1:<br/><span class="formula">Rc = 2√(L/C)</span><br/>Example: For L = 10 mH and C = 10 μF: Rc = 2√(0.01/10⁻⁵) = 2×31.62 = <strong>63.25 Ω</strong>.<br/>If R &lt; Rc → underdamped; R = Rc → critically damped; R > Rc → overdamped. The critically damped condition is important in applications like galvanometers and measuring instruments where fast, non-oscillatory response is desired.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q12</div>
+  <div class="q-text">What is the significance of poles in determining the transient response?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>poles</strong> of the system transfer function (roots of the denominator) determine the transient response:<ul><li><strong>Poles on real axis (left half plane):</strong> exponentially decaying terms</li><li><strong>Complex conjugate poles (LHP):</strong> damped sinusoidal oscillation</li><li><strong>Poles on imaginary axis:</strong> sustained sinusoidal oscillation (marginally stable)</li><li><strong>Poles in right half plane:</strong> growing (unstable) response</li></ul>For the series RLC circuit: poles at <span class="formula">s = -ζωₙ ± jωd</span>. The real part (-ζωₙ) controls the rate of decay; the imaginary part (ωd) gives the oscillation frequency.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 5 ════════════════════════════════ -->
+<div class="exp-section" id="exp5">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E05</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 05 · CONTROL SYSTEMS</div>
+    <div class="exp-title">Time Response of Linear Systems — Step & Square Wave, 1st & 2nd Order, Type 0,1</div>
+  </div>
+  <div class="exp-count">12 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is a first-order system? Write its standard transfer function and step response.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A <strong>first-order system</strong> has a single energy storage element and its transfer function has only one pole. <strong>Standard form:</strong> <span class="formula">H(s) = K/(τs + 1)</span> where K is DC gain and τ is the time constant.<br/><strong>Unit step response:</strong> <span class="formula">y(t) = K(1 - e^(-t/τ))·u(t)</span><br/>Characteristics:<ul><li>No overshoot</li><li>Reaches 63.2% of final value at t = τ</li><li>Reaches 99.3% at t ≈ 5τ (settling time)</li><li>Rise time (10% to 90%): <span class="formula">tr ≈ 2.2τ</span></li></ul>Examples: RC circuit (τ=RC), RL circuit (τ=L/R), thermal systems.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">What is a second-order system? Write its standard form and define its time-domain specifications.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Standard second-order transfer function:</strong><br/><span class="formula">H(s) = ωₙ² / (s² + 2ζωₙs + ωₙ²)</span><br/><strong>Time-domain specifications (underdamped case):</strong><ul><li><strong>Rise Time tr:</strong> Time to go from 0% to 100% of final value ≈ (π-φ)/ωd</li><li><strong>Peak Time tp:</strong> Time to reach first peak = π/ωd</li><li><strong>Maximum Overshoot Mp:</strong> <span class="formula">Mp = e^(-πζ/√(1-ζ²)) × 100%</span></li><li><strong>Settling Time ts:</strong> Time to remain within ±2% ≈ 4/(ζωₙ), within ±5% ≈ 3/(ζωₙ)</li><li><strong>Steady-state error ess:</strong> Final value - desired value</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">What is the type of a control system? Define Type 0, Type 1, and Type 2 systems.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>type</strong> of a closed-loop system refers to the number of open-loop poles at the origin (s=0) — i.e., the number of pure integrators in the forward path.<br/><strong>Type 0:</strong> No integrator in open loop. Finite steady-state error for step input. Zero error for impulse.<br/><strong>Type 1:</strong> One integrator (1/s). Zero steady-state error for step input. Finite error for ramp input.<br/><strong>Type 2:</strong> Two integrators (1/s²). Zero error for step and ramp. Finite error for parabolic input.<br/>Open-loop TF: <span class="formula">G(s) = K·(s+z₁)... / [sⁿ·(s+p₁)...]</span> where n = system type.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">What are error constants? Define position, velocity, and acceleration error constants.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Static error constants quantify the steady-state error for standard inputs:<br/><strong>Position error constant:</strong> <span class="formula">Kp = lim(s→0) G(s)</span><br/><strong>Velocity error constant:</strong> <span class="formula">Kv = lim(s→0) s·G(s)</span><br/><strong>Acceleration error constant:</strong> <span class="formula">Ka = lim(s→0) s²·G(s)</span><br/>Steady-state errors: <span class="formula">ess(step) = 1/(1+Kp)</span>, <span class="formula">ess(ramp) = 1/Kv</span>, <span class="formula">ess(parabola) = 1/Ka</span><br/>Type 0: Kp finite, Kv=0, Ka=0. Type 1: Kp=∞, Kv finite, Ka=0. Type 2: Kp=∞, Kv=∞, Ka finite.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">What is the effect of adding a zero or a pole to the transfer function on the step response?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Adding a zero (in LHP):</strong> Increases overshoot and decreases rise time. The zero adds a derivative term, speeding up the response. Adding a zero at s = -z to a 2nd order system adds a derivative term <span class="formula">(1 + s/z)</span> to the numerator.<br/><strong>Adding a pole (in LHP):</strong> Slows down response — increases rise time, peak time, and settling time. It makes the system less responsive (low-pass filtering effect).<br/><strong>Adding a RHP zero:</strong> Causes undershoot (initial response in wrong direction) — characteristic of non-minimum phase systems.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">What is the relationship between damping ratio ζ and percentage overshoot?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a second-order underdamped system, the percentage overshoot (Mp%) depends only on ζ:<br/><span class="formula">Mp% = exp(-πζ/√(1-ζ²)) × 100%</span><br/>Examples:<ul><li>ζ = 0.1 → Mp ≈ 73%</li><li>ζ = 0.5 → Mp ≈ 16.3%</li><li>ζ = 0.707 → Mp ≈ 4.3%</li><li>ζ = 1.0 → Mp = 0% (critically damped)</li></ul>Inversely: <span class="formula">ζ = -ln(Mp/100) / √(π² + [ln(Mp/100)]²)</span>. Overshoot occurs only for ζ &lt; 1 (underdamped).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What is a closed-loop transfer function? How does it differ from open-loop?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a unity feedback system with forward path G(s) and feedback H(s):<br/><strong>Open-loop TF:</strong> <span class="formula">G(s)·H(s)</span> — no feedback path closed<br/><strong>Closed-loop TF:</strong> <span class="formula">T(s) = G(s)/(1 + G(s)H(s))</span> (for unity feedback, H=1: <span class="formula">T = G/(1+G)</span>)<br/>Open-loop control: simpler but sensitive to disturbances. Closed-loop (feedback) control: reduces steady-state error, reduces sensitivity to parameter variations, improves disturbance rejection, but may cause instability if not designed carefully.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">How is the step response simulated in MATLAB for a given transfer function?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><span class="formula">num = [wn^2];</span><br/><span class="formula">den = [1, 2*zeta*wn, wn^2];</span><br/><span class="formula">sys = tf(num, den);</span><br/><span class="formula">t = 0:0.01:10;</span><br/><span class="formula">step(sys);</span> % Auto-plots step response<br/><span class="formula">% OR for more control:</span><br/><span class="formula">[y, t] = step(sys, t);</span><br/><span class="formula">plot(t, y); grid on;</span><br/>For square wave response: <span class="formula">u = square(2*pi*f*t);</span><br/><span class="formula">lsim(sys, u, t);</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">What is the significance of the dominant pole approximation?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">In a higher-order system, poles closest to the imaginary axis (with smallest real parts) decay most slowly and dominate the transient response. Poles far in the LHP decay quickly and contribute little to the long-term behavior.<br/><strong>Dominant pole approximation:</strong> If a pair of complex poles is significantly closer to the jω-axis than other poles (by a factor of 5 or more), the system can be approximated as a <strong>second-order system</strong> using just those two poles. This simplifies analysis greatly. The approximation holds when non-dominant poles are at least 5× farther from jω-axis.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q10</div>
+  <div class="q-text">What is bandwidth? How is it related to rise time?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Bandwidth (BW)</strong> of a control system is the frequency range over which the closed-loop frequency response is within 3 dB of its DC value (i.e., magnitude ≥ 0.707 of DC gain).<br/><strong>Relationship with rise time:</strong> For a second-order system:<br/><span class="formula">BW ≈ 1/tr</span> (approximately, inversely proportional)<br/>More precisely: <span class="formula">BW = ωₙ√(1-2ζ² + √(4ζ⁴ - 4ζ² + 2))</span><br/>Larger bandwidth → faster rise time → faster system response. However, larger BW also amplifies high-frequency noise. There is a design tradeoff between speed (BW) and noise sensitivity.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q11</div>
+  <div class="q-text">Compare the step response of Type 0 and Type 1 systems.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Type 0 system:</strong><ul><li>Closed-loop step response has a <strong>finite steady-state error</strong></li><li>ess = 1/(1+Kp) where Kp = lim(s→0) G(s)</li><li>Higher gain K reduces error but may cause instability</li></ul><strong>Type 1 system:</strong><ul><li>Closed-loop step response has <strong>zero steady-state error</strong></li><li>Kp = ∞, so ess(step) = 0</li><li>However, ramp input gives finite error = 1/Kv</li></ul>The integrator in Type 1 systems acts as an error eliminator for constant inputs. PID controllers add integral action to increase system type and eliminate steady-state error.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q12</div>
+  <div class="q-text">What is the final value theorem? Apply it to find the steady-state value.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>Final Value Theorem (FVT)</strong> states:<br/><span class="formula">lim(t→∞) y(t) = lim(s→0) s·Y(s)</span><br/>Conditions: All poles of s·Y(s) must be in the LHP (system must be stable).<br/><strong>Application:</strong> For a unit step input (1/s) to a system with TF G(s):<br/><span class="formula">Y(s) = G(s)/s</span><br/><span class="formula">y(∞) = lim(s→0) s · G(s)/s = G(0)</span><br/>Example: G(s) = 10/(s+5) → y(∞) = 10/5 = 2. Similarly, the <strong>Initial Value Theorem:</strong> <span class="formula">y(0⁺) = lim(s→∞) s·Y(s)</span></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 6 ════════════════════════════════ -->
+<div class="exp-section" id="exp6">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E06</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 06 · TWO-PORT NETWORKS</div>
+    <div class="exp-title">Determine Z and Y Parameters of the Given Two-Port Network</div>
+  </div>
+  <div class="exp-count">10 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is a two-port network? What are the port conditions?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A <strong>two-port network</strong> is an electrical network with two pairs of terminals (port 1 and port 2) through which it interacts with external circuits. Variables: V₁, I₁ at port 1; V₂, I₂ at port 2 (I₂ is defined entering port 2 for Z/Y, leaving for ABCD).<br/><strong>Port conditions:</strong> The current entering the top terminal must equal the current leaving the bottom terminal at each port. These conditions must be satisfied for two-port parameters to be valid. The network may contain R, L, C elements, and dependent sources (but no independent sources for linear two-port analysis).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">Define Z-parameters (impedance parameters). Write the defining equations.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Z-parameters (open-circuit impedance parameters) express voltages in terms of currents:<br/><span class="formula">V₁ = Z₁₁·I₁ + Z₁₂·I₂</span><br/><span class="formula">V₂ = Z₂₁·I₁ + Z₂₂·I₂</span><br/>Determination:<br/><span class="formula">Z₁₁ = V₁/I₁ |I₂=0</span> (input impedance, port 2 open)<br/><span class="formula">Z₁₂ = V₁/I₂ |I₁=0</span> (reverse transfer impedance, port 1 open)<br/><span class="formula">Z₂₁ = V₂/I₁ |I₂=0</span> (forward transfer impedance, port 2 open)<br/><span class="formula">Z₂₂ = V₂/I₂ |I₁=0</span> (output impedance, port 1 open)<br/>Units: ohms (Ω). Measured with ports open-circuited.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">Define Y-parameters (admittance parameters). Write the defining equations.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Y-parameters (short-circuit admittance parameters) express currents in terms of voltages:<br/><span class="formula">I₁ = Y₁₁·V₁ + Y₁₂·V₂</span><br/><span class="formula">I₂ = Y₂₁·V₁ + Y₂₂·V₂</span><br/>Determination:<br/><span class="formula">Y₁₁ = I₁/V₁ |V₂=0</span> (input admittance, port 2 short-circuited)<br/><span class="formula">Y₁₂ = I₁/V₂ |V₁=0</span> (reverse transfer admittance, port 1 short)<br/><span class="formula">Y₂₁ = I₂/V₁ |V₂=0</span> (forward transfer admittance, port 2 short)<br/><span class="formula">Y₂₂ = I₂/V₂ |V₁=0</span> (output admittance, port 1 short)<br/>Units: siemens (S). Measured with ports short-circuited.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">What is the relationship between Z and Y parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The Y-parameter matrix is the inverse of the Z-parameter matrix (and vice versa), provided the inverse exists:<br/><span class="formula">[Y] = [Z]⁻¹</span><br/>Explicitly: if ΔZ = Z₁₁Z₂₂ - Z₁₂Z₂₁ (determinant of Z matrix):<br/><span class="formula">Y₁₁ = Z₂₂/ΔZ</span><br/><span class="formula">Y₁₂ = -Z₁₂/ΔZ</span><br/><span class="formula">Y₂₁ = -Z₂₁/ΔZ</span><br/><span class="formula">Y₂₂ = Z₁₁/ΔZ</span><br/>Note: Z parameters may not exist (e.g., if a port is short-circuited by a short circuit in the network), similarly Y parameters may not exist for certain networks. In those cases, alternative parameters (ABCD, h) must be used.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">What are the conditions for reciprocity and symmetry in terms of Z and Y parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Reciprocity:</strong> A network containing only passive bilateral elements (R, L, C) is reciprocal. Condition:<br/><span class="formula">Z₁₂ = Z₂₁</span> (for Z parameters)<br/><span class="formula">Y₁₂ = Y₂₁</span> (for Y parameters)<br/><strong>Symmetry:</strong> The network is electrically identical when ports are interchanged. Condition:<br/><span class="formula">Z₁₁ = Z₂₂</span> (for Z parameters)<br/><span class="formula">Y₁₁ = Y₂₂</span> (for Y parameters)<br/>A network can be reciprocal but not symmetric (e.g., L-network), or both reciprocal and symmetric (e.g., T or π networks with equal arms).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">What is the π (pi) equivalent circuit of a two-port network in terms of Y parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Any two-port network can be represented by an equivalent π (pi) circuit using Y parameters:<ul><li><strong>Shunt admittance at port 1:</strong> <span class="formula">Ya = Y₁₁ + Y₁₂</span></li><li><strong>Shunt admittance at port 2:</strong> <span class="formula">Yb = Y₂₂ + Y₁₂</span></li><li><strong>Series (bridging) admittance:</strong> <span class="formula">Yc = -Y₁₂</span></li></ul>For a reciprocal network (Y₁₂=Y₂₁), this gives a straightforward three-element equivalent. The π equivalent is useful for modeling transmission lines, amplifiers, and filter sections.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What is the T equivalent circuit of a two-port network in terms of Z parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Any two-port network can be represented by a T (star) equivalent circuit using Z parameters:<ul><li><strong>Series arm at port 1:</strong> <span class="formula">Za = Z₁₁ - Z₁₂</span></li><li><strong>Series arm at port 2:</strong> <span class="formula">Zb = Z₂₂ - Z₁₂</span></li><li><strong>Shunt (common) arm:</strong> <span class="formula">Zc = Z₁₂</span></li></ul>For a reciprocal network (Z₁₂=Z₂₁), all three elements are determined. The T equivalent is used for modeling transmission lines, audio transformers, and RF matching networks.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">When do Z-parameters or Y-parameters not exist for a two-port network?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Z parameters do not exist</strong> when the open-circuit condition cannot yield a finite voltage — e.g., if the network contains a <strong>short circuit</strong> between port terminals, or if the Z matrix is singular (determinant = 0). Example: a simple series capacitor (shunt path at short-circuit ports becomes undefined).<br/><strong>Y parameters do not exist</strong> when the short-circuit condition is invalid — e.g., if the network contains a <strong>series inductor only</strong> with no path for current when ports are shorted (open circuit in the network). In such cases, hybrid (h, g) or ABCD parameters are used instead.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">How do you experimentally measure Z₁₁ and Z₂₁?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">To measure Z₁₁ and Z₂₁ (with port 2 open-circuited, I₂ = 0):<ol><li>Leave <strong>port 2 open</strong> (no connection)</li><li>Apply known voltage V₁ (or current I₁) to port 1</li><li>Measure current I₁ entering port 1</li><li><span class="formula">Z₁₁ = V₁/I₁</span></li><li>Measure voltage V₂ appearing at open port 2 (with voltmeter)</li><li><span class="formula">Z₂₁ = V₂/I₁</span></li></ol>For AC circuits, use phasor measurements (magnitudes and phases). Repeat with port 1 open to find Z₁₂ and Z₂₂.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q10</div>
+  <div class="q-text">What are the practical applications of Z and Y parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Z parameters used in:</strong> Analysis of series-series interconnected networks, antenna impedance matching, transmission line modeling, characterizing RF/microwave networks.<br/><strong>Y parameters used in:</strong> Parallel-parallel interconnected networks, nodal analysis (Y-bus matrix in power systems), MOSFET and BJT small-signal modeling, filter design (ladder networks).<br/>Both are used in: Network synthesis, equivalent circuit derivation, S-parameter conversion (for high-frequency/RF work), and simulation tools like SPICE and Agilent ADS.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 7 ════════════════════════════════ -->
+<div class="exp-section" id="exp7">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E07</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 07 · TWO-PORT NETWORKS</div>
+    <div class="exp-title">Determine ABCD (Transmission) Parameters of the Two-Port Network</div>
+  </div>
+  <div class="exp-count">9 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">Define ABCD parameters. Write the defining equations and the physical significance of each parameter.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">ABCD (transmission/chain) parameters relate port 1 variables to port 2 variables (note: I₂ is defined as leaving port 2):<br/><span class="formula">V₁ = A·V₂ - B·I₂</span><br/><span class="formula">I₁ = C·V₂ - D·I₂</span><br/><strong>Physical significance:</strong><br/><span class="formula">A = V₁/V₂ |I₂=0</span> — Voltage ratio (port 2 open), dimensionless<br/><span class="formula">B = V₁/(-I₂) |V₂=0</span> — Transfer impedance (port 2 short), units Ω<br/><span class="formula">C = I₁/V₂ |I₂=0</span> — Transfer admittance (port 2 open), units S<br/><span class="formula">D = I₁/(-I₂) |V₂=0</span> — Current ratio (port 2 short), dimensionless</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">What is the condition for reciprocity and symmetry in terms of ABCD parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Reciprocity:</strong> <span class="formula">AD - BC = 1</span> (determinant of ABCD matrix = 1)<br/><strong>Symmetry:</strong> <span class="formula">A = D</span><br/><strong>Passive lossless network:</strong> A and D are real, B and C are imaginary (for purely reactive networks).<br/>For a reciprocal symmetric network: AD - BC = 1 and A = D. These conditions can be used to verify experimental measurements. If AD - BC ≠ 1 experimentally, it indicates measurement error or active/non-bilateral elements.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">Why are ABCD parameters preferred for cascade networks?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a cascade (series chain) of N two-port networks, the overall ABCD matrix is simply the <strong>matrix product</strong> of the individual ABCD matrices:<br/><span class="formula">[ABCD]overall = [ABCD]₁ · [ABCD]₂ · ... · [ABCD]N</span><br/>This is extremely convenient because matrix multiplication is straightforward. In contrast, finding overall Z or Y parameters of cascaded networks requires complex conversions. ABCD parameters are thus the natural choice for <strong>transmission lines, filter ladders, attenuators, and communication networks</strong> where multiple two-ports are cascaded.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">Derive ABCD parameters for a simple series impedance Z (two-port).</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a series impedance Z (T-network with Z in series, nothing in shunt):<br/>Using KVL: V₁ = V₂ + Z·I₁, and since there's no shunt element: I₁ = I₂ (current through is the same, with I₂ out = I₁ in).<br/>Wait — with I₂ defined leaving: I₁ = -(-I₂) = I₂<br/><span class="formula">V₁ = V₂ - Z·(-I₂) = V₂ + Z·I₂ ... </span><br/>Actually: V₁ = 1·V₂ + Z·(-I₂) convention → <strong>A = 1, B = Z, C = 0, D = 1</strong><br/>ABCD matrix: <span class="formula">[[1, Z], [0, 1]]</span><br/>Check: AD - BC = 1·1 - Z·0 = 1 ✓ (reciprocal)</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">Derive ABCD parameters for a shunt admittance Y (two-port).</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a shunt admittance Y across the ports (both ports share the same voltage): V₁ = V₂ (no series element).<br/>Current: I₁ = YV₁ + (-I₂) = YV₂ - I₂<br/>Comparing with I₁ = C·V₂ - D·I₂:<br/><strong>A = 1, B = 0, C = Y, D = 1</strong><br/>ABCD matrix: <span class="formula">[[1, 0], [Y, 1]]</span><br/>Check: AD - BC = 1·1 - 0·Y = 1 ✓<br/>These two building blocks (series Z and shunt Y) can be cascaded to build any ladder network's overall ABCD matrix by matrix multiplication.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">How do you convert ABCD parameters to Z parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Conversion from ABCD to Z parameters (assuming C ≠ 0):<br/><span class="formula">Z₁₁ = A/C</span><br/><span class="formula">Z₁₂ = (AD-BC)/C = 1/C</span> (for reciprocal network where AD-BC=1)<br/><span class="formula">Z₂₁ = 1/C</span><br/><span class="formula">Z₂₂ = D/C</span><br/>Conversion from ABCD to Y parameters (assuming B ≠ 0):<br/><span class="formula">Y₁₁ = D/B, Y₁₂ = -(AD-BC)/B = -1/B</span><br/><span class="formula">Y₂₁ = -1/B, Y₂₂ = A/B</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What are the ABCD parameters of an ideal transformer with turns ratio n:1?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For an ideal transformer with turns ratio n:1 (V₁/V₂ = n, I₁/I₂ = 1/n):<br/><span class="formula">V₁ = n·V₂</span> → A = n, B = 0<br/><span class="formula">I₁ = (1/n)·I₂</span> → C = 0, D = 1/n<br/>ABCD matrix: <span class="formula">[[n, 0], [0, 1/n]]</span><br/>Check: AD - BC = n·(1/n) - 0 = 1 ✓<br/>Note: A = D only when n = 1/n, i.e., n = 1 (unity ratio), so a transformer is symmetric only for n = 1. The ideal transformer is lossless and reciprocal.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">What is the input impedance of a two-port network terminated in load ZL, in terms of ABCD parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">When port 2 is loaded with impedance ZL (V₂ = -I₂·ZL, with I₂ leaving port 2):<br/><span class="formula">Zin = V₁/I₁ = (A·ZL + B)/(C·ZL + D)</span><br/>This is very useful in transmission line analysis, filter design, and impedance transformation. Special cases:<ul><li>Open circuit (ZL = ∞): Zin = A/C</li><li>Short circuit (ZL = 0): Zin = B/D</li><li>Characteristic impedance: Zin = Z₀ when Z₀ = √(B/C) (for symmetric network A=D)</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">What are the practical applications of ABCD parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Applications of ABCD parameters:</strong><ul><li><strong>Transmission lines:</strong> Characterizing long-distance power and signal transmission</li><li><strong>Filter design:</strong> Ladder networks (LC filters) easily analyzed by cascading sections</li><li><strong>Power systems:</strong> ABCD constants of transmission lines (A,B,C,D relate sending and receiving end quantities)</li><li><strong>Microwave engineering:</strong> Modeling waveguide sections and discontinuities</li><li><strong>Optical systems:</strong> Ray transfer matrices (ABCD matrices) for lens and mirror systems</li><li><strong>Attenuator and amplifier chains:</strong> Overall gain and impedance easily computed</li></ul></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 8 ════════════════════════════════ -->
+<div class="exp-section" id="exp8">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E08</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 08 · CIRCUIT THEOREMS</div>
+    <div class="exp-title">Verify Various Theorems in AC Circuits</div>
+  </div>
+  <div class="exp-count">11 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">State and explain Thevenin's theorem. How is it applied to AC circuits?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Thevenin's Theorem:</strong> Any linear two-terminal network containing sources and impedances can be replaced by a single <strong>voltage source Vth in series with an impedance Zth</strong>.<br/><strong>Finding Vth:</strong> Remove load, find open-circuit voltage across terminals.<br/><strong>Finding Zth:</strong> Deactivate all independent sources (short V-sources, open I-sources), find impedance seen from terminals.<br/><strong>In AC circuits:</strong> All quantities are phasors. Vth is the open-circuit phasor voltage; Zth is the complex impedance (has both real and imaginary parts). The theorem simplifies analysis when multiple loads need to be analyzed for the same source network.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">State Norton's theorem and explain its relationship to Thevenin's theorem.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Norton's Theorem:</strong> Any linear two-terminal network can be replaced by a <strong>current source IN in parallel with impedance ZN</strong>.<br/><strong>Finding IN:</strong> Short-circuit the load terminals and find the current through the short (Norton current).<br/><strong>Finding ZN:</strong> Same as Zth (ZN = Zth).<br/><strong>Relationship:</strong> Norton and Thevenin are duals:<br/><span class="formula">Vth = IN × ZN</span><br/><span class="formula">ZN = Zth</span><br/>Source transformation converts between them. Both theorems yield identical results when connected to the same load impedance ZL.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">State the Maximum Power Transfer theorem for AC circuits. What is the condition for maximum power?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Maximum Power Transfer Theorem:</strong> Maximum power is delivered to a load when the load impedance ZL is the <strong>complex conjugate</strong> of the Thevenin source impedance Zth.<br/><strong>Condition:</strong> <span class="formula">ZL = Z*th = Rth - jXth</span><br/>Under this condition: Load resistance RL = Rth and Load reactance XL = -Xth (cancels source reactance).<br/><strong>Maximum power:</strong> <span class="formula">Pmax = |Vth|²/(4Rth)</span><br/>For purely resistive circuits: ZL = Zth → RL = Rth (load = source resistance). The efficiency at maximum power is 50% (equal power in source and load).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">State the Superposition theorem. When can it be applied?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Superposition Theorem:</strong> In a linear circuit with multiple independent sources, the total response (voltage or current) at any element is the algebraic sum of individual responses due to each independent source acting alone, with all other sources deactivated.<br/><strong>Conditions for application:</strong><ul><li>Circuit must be <strong>linear</strong> (obeys superposition)</li><li>Cannot be applied directly to power (P ≠ P₁ + P₂) as power is non-linear (I²R)</li><li>Dependent sources are NOT deactivated</li></ul><strong>In AC circuits:</strong> Add phasor contributions from each source separately.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">State the Reciprocity theorem. Give an example.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Reciprocity Theorem:</strong> In a linear bilateral (passive) network with a single excitation, if we interchange the position of the source and the response (ammeter/voltmeter), the magnitude of the response remains unchanged.<br/><strong>Conditions:</strong> Only one independent source; network must be linear and bilateral (no dependent sources, no active elements).<br/><strong>Example:</strong> If a voltage source V at node A produces current I at branch B, then the same source V placed at branch B produces the same current I at node A.<br/>This is related to Z₁₂ = Z₂₁ and Y₁₂ = Y₂₁ for two-port networks.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">State Millman's theorem. Where is it useful?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Millman's Theorem:</strong> For multiple voltage sources connected in parallel (through their series impedances) to a common load, the equivalent voltage and impedance are:<br/><span class="formula">Veq = (V₁Y₁ + V₂Y₂ + ... + VₙYₙ) / (Y₁ + Y₂ + ... + Yₙ)</span><br/><span class="formula">Zeq = 1/(Y₁ + Y₂ + ... + Yₙ)</span><br/>where Yᵢ = 1/Zᵢ.<br/><strong>Useful for:</strong> Parallel generator systems, power grid analysis with multiple sources, finding common bus voltage when multiple branches with EMF sources are connected in parallel. Simplifies circuits that would otherwise require extensive mesh/nodal analysis.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">State Tellegen's theorem. What does it express?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Tellegen's Theorem:</strong> For any network satisfying KVL and KCL, the sum of instantaneous power delivered to all branches is zero:<br/><span class="formula">Σ vₖ·iₖ = 0</span> (summed over all branches k)<br/>This is essentially a statement of energy conservation. It applies to any lumped network regardless of the nature of elements (linear, nonlinear, time-varying). It can be applied between two different networks with the same topology (not necessarily the same elements).<br/><strong>Significance:</strong> Provides a powerful tool for deriving other network theorems and proving network properties. It is more general than other circuit theorems.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">How do you experimentally verify Thevenin's theorem?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Step 1 — Original circuit:</strong> Connect load RL to circuit. Measure voltage VL and current IL across/through RL.<br/><strong>Step 2 — Find Vth:</strong> Remove RL. Measure open-circuit voltage Voc = Vth at terminals using voltmeter.<br/><strong>Step 3 — Find Rth/Zth:</strong> Deactivate sources (short V-sources, open I-sources). Measure resistance/impedance between terminals with LCR meter or calculate from component values.<br/><strong>Step 4 — Verify:</strong> Build Thevenin equivalent (Vth in series with Zth + RL). Calculate and measure VL = Vth·RL/(Zth+RL). Compare with Step 1. If they match ✓, Thevenin's theorem is verified.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">What is the compensation theorem?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Compensation Theorem:</strong> Any element Z in a network can be replaced by a voltage source of value V = Z·I (where I is the current through Z) with zero impedance (short circuit) for the branch, and the currents and voltages throughout the rest of the network remain unchanged.<br/><strong>Application:</strong> Used to find changes in network response when an element value changes by ΔZ. The change ΔZ can be compensated by a source of value ΔV = ΔZ·I. This allows incremental analysis without solving the full circuit again, useful in sensitivity analysis and network design.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q10</div>
+  <div class="q-text">How does the presence of dependent sources affect the application of circuit theorems?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Dependent (controlled) sources complicate theorem application:<ul><li><strong>Thevenin/Norton:</strong> Dependent sources are NOT deactivated when finding Zth. Must use a test voltage/current method: apply Vtest at terminals, find Itest (or vice versa), then Zth = Vtest/Itest. Zth may be negative with dependent sources.</li><li><strong>Superposition:</strong> Dependent sources remain active; only independent sources are turned off one at a time.</li><li><strong>Reciprocity:</strong> Does NOT apply to networks with dependent sources.</li><li><strong>Maximum Power Transfer:</strong> Still applies, but Zth calculation must include dependent sources.</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q11</div>
+  <div class="q-text">What is the difference between ideal and practical voltage and current sources?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Ideal Voltage Source:</strong> Maintains constant terminal voltage regardless of current drawn. Internal impedance = 0.<br/><strong>Practical Voltage Source:</strong> Has internal series impedance Zs. Terminal voltage drops under load: V = Vs - I·Zs.<br/><strong>Ideal Current Source:</strong> Maintains constant current regardless of terminal voltage. Internal impedance = ∞.<br/><strong>Practical Current Source:</strong> Has internal shunt impedance Zp. Some current is diverted internally.<br/>In Thevenin/Norton analysis: ideal V-sources are shorted (internal Z=0) and ideal I-sources are opened (internal Z=∞) when finding Thevenin impedance.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 9 ════════════════════════════════ -->
+<div class="exp-section" id="exp9">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E09</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 09 · TWO-PORT NETWORKS</div>
+    <div class="exp-title">Determine Hybrid (h) Parameters of the Given Two-Port Network</div>
+  </div>
+  <div class="exp-count">9 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">Define hybrid h-parameters. Write the defining equations and physical significance of each.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Hybrid parameters use mixed variables (V₁, I₂ as independent, I₁, V₂ as dependent):<br/><span class="formula">V₁ = h₁₁·I₁ + h₁₂·V₂</span><br/><span class="formula">I₂ = h₂₁·I₁ + h₂₂·V₂</span><br/><strong>Physical significance:</strong><br/><span class="formula">h₁₁ = V₁/I₁|V₂=0</span> — Short-circuit input impedance (Ω)<br/><span class="formula">h₁₂ = V₁/V₂|I₁=0</span> — Open-circuit reverse voltage gain (dimensionless)<br/><span class="formula">h₂₁ = I₂/I₁|V₂=0</span> — Short-circuit forward current gain (dimensionless)<br/><span class="formula">h₂₂ = I₂/V₂|I₁=0</span> — Open-circuit output admittance (S)<br/>Each parameter has different units — hence "hybrid"!</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">Why are h-parameters particularly important in transistor circuit analysis?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">H-parameters are ideal for BJT (Bipolar Junction Transistor) analysis because:<ul><li>The transistor naturally has a <strong>low input impedance</strong> and <strong>high output impedance</strong>, matching the h-parameter model</li><li>h₂₁ = hfe is the <strong>current gain β</strong> of the transistor (most important parameter)</li><li>Input port is naturally short-circuit tested (base-emitter junction); output port is open-circuit tested (collector)</li><li>Manufacturers specify BJT as hie, hfe, hre, hoe for CE, CB, CC configurations</li></ul>The h-parameter model is the standard small-signal model used in amplifier design and analysis.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">What is the condition for reciprocity in h-parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a reciprocal (passive bilateral) two-port network, the h-parameters satisfy:<br/><span class="formula">h₁₂ = -h₂₁</span><br/>Note the negative sign (unlike Z and Y parameters where the cross parameters are simply equal). This is because the h-matrix for a reciprocal network has det[h] = h₁₁h₂₂ - h₁₂h₂₁ = 1... actually for a reciprocal network: <span class="formula">Δh = h₁₁h₂₂ - h₁₂h₂₁ = 1</span> is not the condition. The reciprocity condition is simply <span class="formula">h₁₂ = -h₂₁</span>.<br/><strong>Symmetry condition:</strong> <span class="formula">Δh = h₁₁h₂₂ - h₁₂h₂₁ = 1</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">How do you convert h-parameters to Z-parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Let Δh = h₁₁h₂₂ - h₁₂h₂₁ (determinant of h matrix). Conversion to Z:<br/><span class="formula">Z₁₁ = Δh/h₂₂</span><br/><span class="formula">Z₁₂ = h₁₂/h₂₂</span><br/><span class="formula">Z₂₁ = -h₂₁/h₂₂</span><br/><span class="formula">Z₂₂ = 1/h₂₂</span><br/><strong>Conversion to Y (g-parameters inverse of h):</strong> [g] = [h]⁻¹<br/><span class="formula">g₁₁ = h₂₂/Δh, g₁₂ = -h₁₂/Δh, g₂₁ = -h₂₁/Δh, g₂₂ = h₁₁/Δh</span></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">What are g-parameters (inverse hybrid)? When are they preferred over h-parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">G-parameters (inverse hybrid or admittance-impedance parameters) use I₁ and V₂ as independent variables:<br/><span class="formula">I₁ = g₁₁V₁ + g₁₂I₂</span><br/><span class="formula">V₂ = g₂₁V₁ + g₂₂I₂</span><br/>[g] = [h]⁻¹<br/><strong>G-parameters preferred when:</strong><ul><li>Network has high input impedance and low output impedance (opposite of BJT — more suitable for FETs/MOSFETs)</li><li>Input port is open-circuit tested, output is short-circuit tested</li><li>g₂₁ represents voltage gain (FET parameter gm relates to this)</li></ul>For series-parallel network interconnection.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">How do you experimentally determine h-parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Step 1 — Short-circuit port 2 (V₂ = 0):</strong><br/>Apply known I₁, measure V₁ → <span class="formula">h₁₁ = V₁/I₁</span><br/>Measure I₂ → <span class="formula">h₂₁ = I₂/I₁</span><br/><strong>Step 2 — Open-circuit port 1 (I₁ = 0):</strong><br/>Apply known V₂, measure V₁ → <span class="formula">h₁₂ = V₁/V₂</span><br/>Measure I₂ → <span class="formula">h₂₂ = I₂/V₂</span><br/>For AC circuits, use signal generator and oscilloscope/LCR meter. All values are complex (phasors).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What type of network interconnection uses h-parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">H-parameters are associated with the <strong>series-parallel (SP) interconnection</strong> of two-port networks:<ul><li>Port 1 inputs are connected in <strong>series</strong> (voltages add: V₁ = V₁a + V₁b, currents are equal)</li><li>Port 2 outputs are connected in <strong>parallel</strong> (currents add: I₂ = I₂a + I₂b, voltages are equal)</li></ul>Overall h-matrix: <span class="formula">[h] = [ha] + [hb]</span><br/>This is why h-parameters of series-parallel interconnected networks are simply added — as will be verified in Experiment 13.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">How are h-parameters of a BJT transistor in CE configuration defined (hie, hfe, hre, hoe)?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For Common Emitter (CE) BJT configuration:<br/><span class="formula">hie = h₁₁</span> — Input impedance (short-circuit) ≈ rπ (base-emitter resistance), ~1-2 kΩ<br/><span class="formula">hre = h₁₂</span> — Reverse voltage ratio (open-circuit) ≈ 10⁻⁴ (very small, often neglected)<br/><span class="formula">hfe = h₂₁</span> — Forward current gain (short-circuit) = β (current gain, ~50-300)<br/><span class="formula">hoe = h₂₂</span> — Output admittance (open-circuit) ≈ 1/ro (output resistance), ~25 μS<br/>These are specified on transistor datasheets and used for AC small-signal amplifier design.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q09</div>
+  <div class="q-text">Compare all six two-port parameter sets in terms of independent variables.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Summary of two-port parameter sets:<br/>
+  <strong>Z (impedance):</strong> Independent I₁,I₂ → Dependent V₁,V₂. Measured open-circuit.<br/>
+  <strong>Y (admittance):</strong> Independent V₁,V₂ → Dependent I₁,I₂. Measured short-circuit.<br/>
+  <strong>h (hybrid):</strong> Independent I₁,V₂ → Dependent V₁,I₂. Mixed measurements.<br/>
+  <strong>g (inverse hybrid):</strong> Independent V₁,I₂ → Dependent I₁,V₂. Mixed measurements.<br/>
+  <strong>ABCD (transmission):</strong> Independent V₂,-I₂ → Dependent V₁,I₁. Port 2 to port 1.<br/>
+  <strong>A'B'C'D' (inverse transmission):</strong> Independent V₁,-I₁ → Dependent V₂,I₂. Port 1 to port 2.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 10 ════════════════════════════════ -->
+<div class="exp-section" id="exp10">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E10</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 10 · INTERCONNECTED NETWORKS</div>
+    <div class="exp-title">Cascade Connection and ABCD Parameters of Two-Port Networks</div>
+  </div>
+  <div class="exp-count">8 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is a cascade (tandem) connection of two-port networks? State the property of ABCD matrices in cascade.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">In a <strong>cascade connection</strong>, the output port (port 2) of network Na is directly connected to the input port (port 1) of network Nb — i.e., V₂a = V₁b and I₂a = -I₁b (sign convention: current leaving Na enters Nb).<br/><strong>ABCD matrix property:</strong><br/><span class="formula">[ABCD]overall = [ABCD]a × [ABCD]b</span><br/>This is a simple matrix multiplication. For n cascaded networks:<br/><span class="formula">[T] = [T₁][T₂][T₃]...[Tₙ]</span><br/>Note: Order matters (matrix multiplication is not commutative). Cascading is used in filters, amplifier stages, and transmission line sections.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">What is the port condition that must be satisfied for cascade connection to be valid?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>port condition for cascade</strong>: when network Nb is connected to Na, the current entering port 1 of Nb must equal the current leaving port 2 of Na. This requires that no current is "stolen" by external connections at the intermediate node.<br/>Formally: <span class="formula">I₂a = I₁b</span> (with appropriate sign convention). If the intermediate connection draws current from external connections (violating port condition), the cascade formula [T] = [Ta][Tb] is invalid. This can be tested using the Brune test: short-circuit test the intermediate terminals and verify no current flows in the external circuit.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">Compute the ABCD matrix of a cascade of a series impedance Z₁ followed by a shunt admittance Y₁.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Series Z₁: <span class="formula">T₁ = [[1, Z₁], [0, 1]]</span><br/>Shunt Y₁: <span class="formula">T₂ = [[1, 0], [Y₁, 1]]</span><br/>Overall: <span class="formula">T = T₁ × T₂ = [[1, Z₁], [0, 1]] × [[1, 0], [Y₁, 1]]</span><br/><span class="formula">T = [[(1+Z₁Y₁), Z₁], [Y₁, 1]]</span><br/>So A = 1+Z₁Y₁, B = Z₁, C = Y₁, D = 1. Verify: AD-BC = (1+Z₁Y₁)·1 - Z₁·Y₁ = 1 ✓ (reciprocal)<br/>This is the L-section (low-pass) ladder network ABCD matrix.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">What is the characteristic impedance of a symmetric two-port network?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>characteristic impedance Z₀</strong> of a symmetric two-port (where A = D) is defined as the impedance at port 1 when port 2 is terminated in Z₀ itself (image impedance = load impedance):<br/><span class="formula">Z₀ = √(B/C)</span> (for symmetric network A=D)<br/>When terminated in Z₀, the input impedance also equals Z₀ — a property useful for impedance matching.<br/><strong>Propagation constant:</strong> <span class="formula">γ = cosh⁻¹(A) = cosh⁻¹(D)</span><br/>These concepts extend to transmission line theory where Z₀ is the characteristic impedance and γ is the propagation constant.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">Give practical examples where cascade connection of two-ports is used.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Practical examples of cascade connection:</strong><ul><li><strong>Multistage amplifiers:</strong> Each amplifier stage is a two-port; cascade gives overall gain</li><li><strong>Ladder filters (LC):</strong> Low-pass, high-pass, band-pass filters built from cascaded L-sections</li><li><strong>Transmission lines:</strong> Long lines modeled as multiple cascaded π or T sections</li><li><strong>Attenuator pads:</strong> Multiple cascaded attenuator stages</li><li><strong>Optical systems:</strong> Ray tracing through lens systems using ABCD matrices</li><li><strong>Signal processing chains:</strong> ADC + filter + DSP, each as a cascade two-port</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">What are image parameters? How are they related to ABCD parameters?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Image parameters</strong> are defined such that when a network is terminated in its image impedances, the impedances seen looking into each port equal the respective terminations.<br/><strong>Image impedances:</strong><br/><span class="formula">Zi1 = √(AB/CD)</span> (image impedance at port 1)<br/><span class="formula">Zi2 = √(BD/AC)</span> (image impedance at port 2)<br/><strong>Image propagation constant:</strong><br/><span class="formula">e^(-γ) = √(AD) - √(BC) = √(AD-BC) + ... </span><br/>Actually: <span class="formula">cosh(γ) = √(AD)</span><br/>Image parameters are used in filter design theory (image parameter method) for designing ladder filters.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">How do you find the overall Z parameters after cascade connection?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For a cascade connection, Z parameters do not simply add (unlike series-series connection). The procedure is:<ol><li>Convert Z parameters of each network to ABCD: [T₁] and [T₂]</li><li>Compute overall ABCD: [T] = [T₁] × [T₂]</li><li>Convert overall ABCD back to Z parameters:<br/><span class="formula">Z₁₁ = A/C, Z₁₂ = Z₂₁ = 1/C</span> (if reciprocal)<br/><span class="formula">Z₂₂ = D/C</span></li></ol>This conversion approach is necessary because cascade connection fundamentally operates in ABCD domain.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">What happens to ABCD parameters when a network is reversed (ports interchanged)?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">When a two-port network is reversed (port 1 ↔ port 2, signal flows from right to left), the new ABCD matrix [T'] is:<br/><span class="formula">A' = D, B' = B, C' = C, D' = A</span><br/>So the new matrix: <span class="formula">T' = [[D, B], [C, A]]</span><br/>For a symmetric network (A = D): T' = T (matrix is unchanged when reversed).<br/>For a reciprocal network: det(T') = D'A' - B'C' = DA - BC = 1, which remains 1 as expected. This is useful when analyzing signal flow in the reverse direction.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 11 ════════════════════════════════ -->
+<div class="exp-section" id="exp11">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E11</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 11 · INTERCONNECTED NETWORKS</div>
+    <div class="exp-title">Series-Series Connection and Z Parameters</div>
+  </div>
+  <div class="exp-count">7 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is a series-series (SS) connection of two two-port networks? State the Z-matrix property.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">In a <strong>series-series connection</strong>, both port 1 inputs are connected in series AND both port 2 outputs are connected in series:<ul><li><strong>Port 1:</strong> V₁ = V₁a + V₁b, I₁a = I₁b = I₁</li><li><strong>Port 2:</strong> V₂ = V₂a + V₂b, I₂a = I₂b = I₂</li></ul><strong>Z-matrix property:</strong> The overall Z matrix is the sum of individual Z matrices:<br/><span class="formula">[Z]overall = [Za] + [Zb]</span><br/>This is the most convenient property — Z parameters simply add for series-series interconnection. This is analogous to series resistance addition in simple circuits.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">What is the port condition (Brune's condition) for series-series connection?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>port condition</strong> requires that the current entering port 1 terminal of each individual network equals the current leaving its port 1 return terminal — even after the interconnection is made.<br/><strong>Brune's test:</strong> Short-circuit both ports of the combined network. Check if any current flows through a wire connecting the input terminal common to both networks. If no such current flows, the port condition is satisfied and [Z]total = [Za] + [Zb]. If current does flow, an isolating transformer must be used.<br/>Violation of port conditions leads to incorrect parameter addition.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">Why does the series-series connection of two-ports result in Z parameter addition?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The Z parameters define: V = Z·I. In series-series connection:<br/>V₁ = V₁a + V₁b = Za₁₁I₁ + Za₁₂I₂ + Zb₁₁I₁ + Zb₁₂I₂ = (Za₁₁+Zb₁₁)I₁ + (Za₁₂+Zb₁₂)I₂<br/>Similarly: V₂ = (Za₂₁+Zb₂₁)I₁ + (Za₂₂+Zb₂₂)I₂<br/>Therefore Z₁₁ = Za₁₁+Zb₁₁, etc., giving <span class="formula">[Z] = [Za]+[Zb]</span>. The key is that <strong>series connection makes voltages add while currents remain equal</strong> — exactly what Z parameters describe (currents as independent variables).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">Give practical examples of series-series interconnection.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Practical examples:</strong><ul><li><strong>Series feedback amplifiers:</strong> Voltage-series feedback (series at input and output) — overall Z-matrix = forward + feedback network Z-matrices</li><li><strong>Differential voltage sensing:</strong> Two networks sensing different voltages in series</li><li><strong>Transformer-coupled balanced circuits</strong></li><li><strong>Series impedance compensation:</strong> Adding a correction network in series with a transmission system</li><li><strong>NMR/MRI resonant circuits</strong> where tuning networks are series-connected</li></ul>Series-series is the topology of choice when dealing with voltage-controlled, current-input systems.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">How do you experimentally verify the Z-parameter addition property of series-series connection?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Procedure:</strong><ol><li>Measure Z parameters of network Na individually: [Za]</li><li>Measure Z parameters of network Nb individually: [Zb]</li><li>Compute theoretical overall Z matrix: [Z]theory = [Za] + [Zb]</li><li>Connect Na and Nb in series-series configuration</li><li>Measure Z parameters of the combined network: [Z]measured</li><li>Verify: [Z]measured ≈ [Z]theory</li></ol>Check Brune's port condition before connecting. If port condition fails, results will not match — use isolating transformers to fix this.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">What is the effect on input and output impedance of series-series feedback in amplifiers?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For series-series feedback (voltage-series at input, current-sensing at output) in amplifiers:<ul><li><strong>Input impedance increases:</strong> <span class="formula">Rin_f = Rin(1 + Aβ)</span> where Aβ is the loop gain. Higher Rin is desirable for voltage amplifiers.</li><li><strong>Output impedance increases:</strong> <span class="formula">Rout_f = Rout(1 + Aβ)</span>. Higher Rout means the output behaves more like a current source.</li><li><strong>Gain decreases:</strong> <span class="formula">Af = A/(1 + Aβ)</span> — but gain becomes more stable (desensitized to transistor parameter variations).</li></ul></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">What parameter set would you use if the series-series port condition is not satisfied?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">If the port condition for series-series connection fails (currents through the interconnecting wires are non-zero), the simple addition [Z] = [Za]+[Zb] is invalid. In this case:<ul><li>Use <strong>ABCD parameters</strong> (always valid for cascade) after connecting the networks in cascade instead</li><li>Use the full network analysis (nodal or mesh) by treating all network elements together</li><li>Use isolating transformers to enforce port conditions, then apply Z-addition</li><li>Apply <strong>graph theory (topological methods)</strong> for general interconnections</li></ul>This is a common pitfall in two-port network analysis.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 12 ════════════════════════════════ -->
+<div class="exp-section" id="exp12">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E12</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 12 · INTERCONNECTED NETWORKS</div>
+    <div class="exp-title">Parallel-Parallel Connection and Y Parameters</div>
+  </div>
+  <div class="exp-count">7 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is a parallel-parallel (PP) connection? State the Y-matrix addition property.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">In a <strong>parallel-parallel connection</strong>, both input ports are in parallel AND both output ports are in parallel:<ul><li><strong>Port 1:</strong> V₁a = V₁b = V₁ (equal voltages); I₁ = I₁a + I₁b (currents add)</li><li><strong>Port 2:</strong> V₂a = V₂b = V₂ (equal voltages); I₂ = I₂a + I₂b (currents add)</li></ul><strong>Y-matrix property:</strong><br/><span class="formula">[Y]overall = [Ya] + [Yb]</span><br/>Y parameters add in parallel-parallel connection. This is the dual of Z addition in series-series connection, and analogous to parallel admittance addition in simple circuits.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">Why do Y parameters add in parallel-parallel connection?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Y parameters define: I = Y·V. In parallel-parallel connection, voltages are equal at both ports and currents add:<br/>I₁ = I₁a + I₁b = Ya₁₁V₁ + Ya₁₂V₂ + Yb₁₁V₁ + Yb₁₂V₂ = (Ya₁₁+Yb₁₁)V₁ + (Ya₁₂+Yb₁₂)V₂<br/>Similarly for I₂, giving <span class="formula">[Y] = [Ya]+[Yb]</span>. The parallel connection makes <strong>voltages equal and currents add</strong> — exactly the setup where Y parameters (voltages as independent variables) are naturally applicable. This mirrors how parallel admittances simply add (Y = Y₁ + Y₂) in basic circuit theory.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">What is the port condition for parallel-parallel connection? What happens if it's violated?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The port condition for PP connection requires that when both networks are connected in parallel, the individual port currents maintain their original values (port currents are not redistributed by common ground loops).<br/>Testing: apply voltages V₁ = 0, V₂ = V at the combined network. Check if any circulating current appears between the ground terminals of Na and Nb at port 1. If circulating current exists, port condition is violated.<br/><strong>Consequence of violation:</strong> [Y]measured ≠ [Ya]+[Yb]. Must use isolating transformers or proceed with full circuit analysis (node voltage method treating all elements together).</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">Give practical examples of parallel-parallel interconnected two-port networks.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Practical examples:</strong><ul><li><strong>Shunt-shunt feedback amplifiers:</strong> Current-sensing at input and output — parallel feedback network added to amplifier, total Y = amplifier Y + feedback Y</li><li><strong>Parallel combination of filter sections:</strong> Two filter branches connected in parallel</li><li><strong>Power system Y-bus matrix:</strong> Parallel connection of transmission lines represented by admittances</li><li><strong>Parallel resonant circuits with additional loading</strong></li><li><strong>Differential amplifier with common-mode feedback</strong></li></ul>Parallel-parallel is preferred when voltage is the controlled variable and current is the output.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">What is the effect of parallel-parallel feedback on amplifier input and output impedance?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For shunt-shunt (parallel-parallel) feedback amplifiers:<ul><li><strong>Input impedance decreases:</strong> <span class="formula">Rin_f = Rin/(1 + Aβ)</span>. Lower Rin makes the input more like a current receiver — desirable for transimpedance amplifiers.</li><li><strong>Output impedance decreases:</strong> <span class="formula">Rout_f = Rout/(1 + Aβ)</span>. Lower Rout means the output behaves more like an ideal voltage source.</li><li><strong>Gain decreases</strong> but becomes more stable.</li></ul>This contrasts with series-series feedback where impedances increase. The type of feedback topology determines which impedances are increased or decreased.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">How is the Y-bus matrix in power systems related to Y-parameters of two-port networks?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The <strong>Y-bus matrix (admittance bus matrix)</strong> in power systems is a generalization of two-port Y-parameters to n-port networks. For a power network with n buses:<span class="formula">I = Ybus · V</span><br/>where I is the vector of injected currents and V is the vector of bus voltages.<br/>Each transmission line between buses i and j is a two-port with admittance yij, and its contribution to Ybus follows Y-parameter parallel-connection addition:<ul><li>Diagonal: Yii = sum of all admittances connected to bus i</li><li>Off-diagonal: Yij = -yij (negative of admittance between buses i and j)</li></ul>This is exactly the parallel admittance addition principle of Y-parameters applied to multi-port networks.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">Compare the four types of interconnections (SS, PP, SP, PS) and their associated parameters.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Summary of two-port interconnections:<br/>
+  <strong>Series-Series (SS):</strong> Port 1 series, Port 2 series → <span class="formula">[Z] = [Za]+[Zb]</span><br/>
+  <strong>Parallel-Parallel (PP):</strong> Port 1 parallel, Port 2 parallel → <span class="formula">[Y] = [Ya]+[Yb]</span><br/>
+  <strong>Series-Parallel (SP):</strong> Port 1 series, Port 2 parallel → <span class="formula">[h] = [ha]+[hb]</span><br/>
+  <strong>Parallel-Series (PS):</strong> Port 1 parallel, Port 2 series → <span class="formula">[g] = [ga]+[gb]</span><br/>
+  <strong>Cascade (Tandem):</strong> Port 2 of one → Port 1 of next → <span class="formula">[T] = [Ta]×[Tb]</span></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════ EXP 13 ════════════════════════════════ -->
+<div class="exp-section" id="exp13">
+<div class="exp-header" onclick="toggleSection(this)">
+  <div class="exp-num-badge">E13</div>
+  <div class="exp-title-block">
+    <div class="exp-sub">EXPERIMENT 13 · INTERCONNECTED NETWORKS</div>
+    <div class="exp-title">Series-Parallel Connection and h Parameters</div>
+  </div>
+  <div class="exp-count">8 Questions</div>
+  <div class="toggle-icon">+</div>
+</div>
+<div class="qa-container">
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q01</div>
+  <div class="q-text">What is a series-parallel (SP) connection? State the h-matrix addition property.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">In a <strong>series-parallel connection</strong>:<ul><li><strong>Port 1 — Series:</strong> V₁ = V₁a + V₁b (voltages add), I₁a = I₁b = I₁ (currents equal)</li><li><strong>Port 2 — Parallel:</strong> V₂a = V₂b = V₂ (voltages equal), I₂ = I₂a + I₂b (currents add)</li></ul><strong>h-matrix property:</strong><br/><span class="formula">[h]overall = [ha] + [hb]</span><br/>H-parameters add in series-parallel interconnection. This makes sense because h-parameters use I₁ and V₂ as independent variables — matching the series (equal current) at port 1 and parallel (equal voltage) at port 2 conditions.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q02</div>
+  <div class="q-text">Why do h-parameters add in series-parallel connection? Derive the result.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">H-parameter equations: V₁ = h₁₁I₁ + h₁₂V₂, I₂ = h₂₁I₁ + h₂₂V₂<br/>For SP connection: I₁ is common to both, V₂ is common to both, V₁ and I₂ are summed:<br/>V₁ = V₁a+V₁b = (ha₁₁+hb₁₁)I₁ + (ha₁₂+hb₁₂)V₂<br/>I₂ = I₂a+I₂b = (ha₂₁+hb₂₁)I₁ + (ha₂₂+hb₂₂)V₂<br/>Therefore: <span class="formula">h₁₁ = ha₁₁+hb₁₁, h₁₂ = ha₁₂+hb₁₂</span><br/><span class="formula">h₂₁ = ha₂₁+hb₂₁, h₂₂ = ha₂₂+hb₂₂</span><br/>giving [h] = [ha]+[hb] ∎</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q03</div>
+  <div class="q-text">What is the port condition for series-parallel connection?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">For the SP connection to be valid:<ul><li><strong>At port 1 (series):</strong> The current flowing into the upper terminal of each sub-network must equal the current flowing out of its lower terminal. No current should leak through parasitic paths created by the interconnection.</li><li><strong>At port 2 (parallel):</strong> Connecting port 2 of Na in parallel with port 2 of Nb must not create ground loops that alter the individual port currents.</li></ul>Testing: Insert voltage source V between the ground terminals at port 2. If no current flows, the condition is satisfied. Use isolating transformers if needed to enforce port conditions.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q04</div>
+  <div class="q-text">Give the example of series-parallel feedback in amplifiers.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">A classic example of SP (voltage-series, current-shunt) feedback is the <strong>emitter follower (common collector) BJT amplifier</strong>:<ul><li><strong>Series at input:</strong> Feedback voltage (across emitter resistor) is in series with input — senses output voltage</li><li><strong>Parallel at output:</strong> Output current is sampled by the shunt feedback element</li></ul>Effect: input impedance increases, output impedance decreases, voltage gain ≈ 1 (unity gain buffer). Another example: <strong>op-amp non-inverting voltage follower</strong> with 100% feedback — R₁ = ∞ configuration.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q05</div>
+  <div class="q-text">Compare series-parallel (SP) and parallel-series (PS) connections.</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text"><strong>Series-Parallel (SP):</strong><ul><li>Port 1: series (voltages add, currents equal)</li><li>Port 2: parallel (currents add, voltages equal)</li><li>Associated parameter: h-parameters ([h] = [ha]+[hb])</li><li>Feedback type: Series input, shunt output (voltage-series feedback)</li></ul><strong>Parallel-Series (PS):</strong><ul><li>Port 1: parallel (currents add, voltages equal)</li><li>Port 2: series (voltages add, currents equal)</li><li>Associated parameter: g-parameters ([g] = [ga]+[gb])</li><li>Feedback type: Shunt input, series output (current-shunt feedback)</li></ul>SP and PS are duals of each other.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q06</div>
+  <div class="q-text">How does series-parallel feedback affect transimpedance (V/I) of an amplifier?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Series-parallel feedback is used in <strong>transresistance amplifiers</strong> (current-to-voltage converters):<ul><li>Input: current I_in injected at node (shunt at input) — actually this is shunt-series. For SP: voltage in, voltage out (voltage gain amplifier)</li><li>SP feedback stabilizes <strong>voltage gain Avf = Vo/Vi</strong></li><li><span class="formula">Avf = Av/(1 + Avβ)</span> where β = feedback fraction (voltage divider)</li><li>Input impedance: increases by factor (1 + Avβ)</li><li>Output impedance: decreases by factor (1 + Avβ)</li></ul>Op-amp non-inverting amplifier with resistive voltage divider is the canonical SP feedback circuit.</div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q07</div>
+  <div class="q-text">Summarize all interconnection types: which parameters are used, and why?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">The choice of parameter set for network interconnection is determined by which quantities are common (equal) and which are summed:<br/>
+  <table style="width:100%; font-family: var(--mono); font-size: 11px; border-collapse: collapse; margin-top: 8px;">
+    <tr style="color: var(--accent); border-bottom: 1px solid #0f2a3f;">
+      <th style="padding:4px 8px; text-align:left">Interconnect</th>
+      <th style="padding:4px 8px">Port 1</th>
+      <th style="padding:4px 8px">Port 2</th>
+      <th style="padding:4px 8px">Params</th>
+      <th style="padding:4px 8px">Property</th>
+    </tr>
+    <tr style="border-bottom:1px solid #0f2a3f;"><td style="padding:4px 8px;color:#8bb8d4">Series-Series</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Series</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Series</td><td style="padding:4px 8px;text-align:center;color:var(--accent)">Z</td><td style="padding:4px 8px;text-align:center;color:var(--accent2)">[Z]=[Za]+[Zb]</td></tr>
+    <tr style="border-bottom:1px solid #0f2a3f;"><td style="padding:4px 8px;color:#8bb8d4">Parallel-Parallel</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Parallel</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Parallel</td><td style="padding:4px 8px;text-align:center;color:var(--accent)">Y</td><td style="padding:4px 8px;text-align:center;color:var(--accent2)">[Y]=[Ya]+[Yb]</td></tr>
+    <tr style="border-bottom:1px solid #0f2a3f;"><td style="padding:4px 8px;color:#8bb8d4">Series-Parallel</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Series</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Parallel</td><td style="padding:4px 8px;text-align:center;color:var(--accent)">h</td><td style="padding:4px 8px;text-align:center;color:var(--accent2)">[h]=[ha]+[hb]</td></tr>
+    <tr style="border-bottom:1px solid #0f2a3f;"><td style="padding:4px 8px;color:#8bb8d4">Parallel-Series</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Parallel</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Series</td><td style="padding:4px 8px;text-align:center;color:var(--accent)">g</td><td style="padding:4px 8px;text-align:center;color:var(--accent2)">[g]=[ga]+[gb]</td></tr>
+    <tr><td style="padding:4px 8px;color:#8bb8d4">Cascade</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">—</td><td style="padding:4px 8px;text-align:center;color:#b8d4e8">Chain</td><td style="padding:4px 8px;text-align:center;color:var(--accent)">ABCD</td><td style="padding:4px 8px;text-align:center;color:var(--accent2)">[T]=[Ta]×[Tb]</td></tr>
+  </table></div>
+</div>
+</div>
+
+<div class="qa-item">
+<div class="q-row" onclick="toggleQ(this)">
+  <div class="q-num">Q08</div>
+  <div class="q-text">What is the relationship between two-port parameters and feedback amplifier topologies?</div>
+  <div class="q-arrow">▶</div>
+</div>
+<div class="a-row">
+  <div class="a-label">Answer</div>
+  <div class="a-text">Two-port parameter sets correspond directly to feedback amplifier topologies:<br/>
+  <strong>Z-parameters ↔ Series-Series Feedback:</strong> Voltage-series input, current-series output (transimpedance stabilized)<br/>
+  <strong>Y-parameters ↔ Parallel-Parallel Feedback:</strong> Current-shunt input, voltage-shunt output (transadmittance stabilized)<br/>
+  <strong>h-parameters ↔ Series-Parallel Feedback:</strong> Voltage-series input, current-shunt output (voltage gain stabilized)<br/>
+  <strong>g-parameters ↔ Parallel-Series Feedback:</strong> Current-shunt input, voltage-series output (current gain stabilized)<br/>
+  Understanding this connection between two-port parameters and feedback is fundamental to analog amplifier design.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div><!-- end content -->
+
+<div class="footer">
+  CIRCUITS & SYSTEMS · VIVA PREPARATION · For MY CUTIE ~ From HER HAMSTER
+</div>
+</main>
+</div>
+
+<script>
+// ── Toggle experiment section ────────────────────────────────────────
+function toggleSection(header) {
+  const container = header.nextElementSibling;
+  const isOpen = container.classList.contains('open');
+  container.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+// ── Toggle individual Q&A item ───────────────────────────────────────
+function toggleQ(qRow) {
+  const item = qRow.parentElement;
+  const ansRow = qRow.nextElementSibling;
+  const isOpen = item.classList.contains('open');
+  item.classList.toggle('open', !isOpen);
+  ansRow.classList.toggle('open', !isOpen);
+}
+
+// ── Expand / Collapse all ────────────────────────────────────────────
+function expandAll() {
+  document.querySelectorAll('.exp-header').forEach(h => {
+    h.classList.add('open');
+    h.nextElementSibling.classList.add('open');
+  });
+}
+function collapseAll() {
+  document.querySelectorAll('.exp-header').forEach(h => {
+    h.classList.remove('open');
+    h.nextElementSibling.classList.remove('open');
+  });
+  document.querySelectorAll('.qa-item').forEach(item => {
+    item.classList.remove('open');
+    const a = item.querySelector('.a-row');
+    if (a) a.classList.remove('open');
+  });
+}
+
+// ── Sidebar active state ─────────────────────────────────────────────
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Search functionality ─────────────────────────────────────────────
+const searchInput = document.getElementById('searchInput');
+const searchCount = document.getElementById('searchCount');
+
+searchInput.addEventListener('input', function() {
+  const query = this.value.toLowerCase().trim();
+  const allItems = document.querySelectorAll('.qa-item');
+  let visible = 0;
+
+  if (!query) {
+    allItems.forEach(item => {
+      item.style.display = '';
+      item.querySelectorAll('mark').forEach(m => {
+        m.outerHTML = m.textContent;
+      });
+    });
+    searchCount.textContent = '';
+    document.querySelectorAll('.exp-section').forEach(s => s.style.display = '');
+    return;
+  }
+
+  // Open all sections for search
+  document.querySelectorAll('.qa-container').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.exp-header').forEach(h => h.classList.add('open'));
+
+  allItems.forEach(item => {
+    const qText = item.querySelector('.q-text')?.textContent.toLowerCase() || '';
+    const aText = item.querySelector('.a-text')?.textContent.toLowerCase() || '';
+    const match = qText.includes(query) || aText.includes(query);
+    item.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+
+  // Hide sections with no results
+  document.querySelectorAll('.exp-section').forEach(section => {
+    const anyVisible = [...section.querySelectorAll('.qa-item')].some(i => i.style.display !== 'none');
+    section.style.display = anyVisible ? '' : 'none';
+  });
+
+  searchCount.textContent = visible > 0 ? `${visible} result${visible !== 1 ? 's' : ''}` : 'No results';
+});
+
+// ── Intersection Observer for sidebar active state ───────────────────
+const sections = document.querySelectorAll('.exp-section');
+const navLinks = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.2, rootMargin: '-60px 0px -40% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// Count total questions
+const total = document.querySelectorAll('.qa-item').length;
+document.getElementById('totalQ').textContent = total;
+</script>
+</body>
+</html>
