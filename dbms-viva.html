@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DBMS Viva — Question Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:       #080c18;
+    --surface:  #0f1525;
+    --card:     #141928;
+    --border:   #1e2a42;
+    --accent:   #e8a020;
+    --accent2:  #5b8ef0;
+    --green:    #3fcf8e;
+    --text:     #c8d3ec;
+    --muted:    #5a6a8a;
+    --white:    #eef2ff;
+    --unit1:    #e8a020;
+    --unit2:    #5b8ef0;
+    --unit3:    #3fcf8e;
+    --unit4:    #e05a7a;
+    --radius:   12px;
+    --shadow:   0 4px 32px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Lora',Georgia,serif;
+    min-height:100vh;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+
+  /* ── NOISE OVERLAY ─────────────────────────── */
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+    pointer-events:none;z-index:0;opacity:.6;
+  }
+
+  /* ── HEADER ────────────────────────────────── */
+  header{
+    background:linear-gradient(135deg,#0d1220 0%,#111827 100%);
+    border-bottom:1px solid var(--border);
+    padding:28px 20px 20px;
+    text-align:center;
+    position:sticky;top:0;z-index:100;
+    backdrop-filter:blur(12px);
+  }
+  .header-badge{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.65rem;letter-spacing:.14em;
+    color:var(--accent);border:1px solid var(--accent);
+    padding:3px 10px;border-radius:20px;margin-bottom:10px;
+    text-transform:uppercase;
+  }
+  header h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(1.5rem,5vw,2.4rem);
+    color:var(--white);letter-spacing:-.02em;
+    line-height:1.2;
+  }
+  header h1 span{color:var(--accent);}
+  .header-sub{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;color:var(--muted);margin-top:6px;
+    letter-spacing:.06em;
+  }
+
+  /* ── SEARCH ────────────────────────────────── */
+  .search-wrap{
+    max-width:680px;margin:16px auto 0;
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;background:var(--surface);
+    border:1px solid var(--border);border-radius:30px;
+    padding:11px 20px 11px 44px;
+    font-family:'JetBrains Mono',monospace;font-size:.82rem;
+    color:var(--white);outline:none;
+    transition:border-color .25s,box-shadow .25s;
+  }
+  .search-wrap input::placeholder{color:var(--muted);}
+  .search-wrap input:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(91,142,240,.15);}
+  .search-icon{
+    position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:var(--muted);font-size:.9rem;pointer-events:none;
+  }
+  #search-count{
+    font-family:'JetBrains Mono',monospace;font-size:.68rem;
+    color:var(--muted);text-align:center;margin-top:6px;
+  }
+
+  /* ── UNIT FILTER PILLS ─────────────────────── */
+  .filter-bar{
+    display:flex;flex-wrap:wrap;gap:8px;
+    justify-content:center;padding:16px 16px 0;
+    max-width:800px;margin:0 auto;
+  }
+  .pill{
+    font-family:'JetBrains Mono',monospace;font-size:.7rem;
+    letter-spacing:.05em;padding:6px 16px;border-radius:20px;
+    border:1px solid var(--border);background:transparent;
+    color:var(--muted);cursor:pointer;transition:all .2s;
+  }
+  .pill:hover{color:var(--white);border-color:var(--white);}
+  .pill.active-all,.pill[data-unit="all"].active-all{
+    background:var(--accent);border-color:var(--accent);color:#000;font-weight:600;
+  }
+  .pill[data-unit="1"].active{background:var(--unit1);border-color:var(--unit1);color:#000;}
+  .pill[data-unit="2"].active{background:var(--unit2);border-color:var(--unit2);color:#fff;}
+  .pill[data-unit="3"].active{background:var(--unit3);border-color:var(--unit3);color:#000;}
+  .pill[data-unit="4"].active{background:var(--unit4);border-color:var(--unit4);color:#fff;}
+
+  /* ── PROGRESS BAR ──────────────────────────── */
+  .progress-wrap{
+    max-width:800px;margin:12px auto 0;padding:0 16px;
+    font-family:'JetBrains Mono',monospace;font-size:.68rem;
+    color:var(--muted);display:flex;align-items:center;gap:10px;
+  }
+  .progress-track{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .4s ease;}
+
+  /* ── MAIN ──────────────────────────────────── */
+  main{max-width:800px;margin:0 auto;padding:20px 12px 80px;}
+
+  /* ── UNIT SECTION ──────────────────────────── */
+  .unit-section{margin-bottom:32px;}
+  .unit-header{
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:14px;padding:0 4px;
+  }
+  .unit-badge{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.65rem;letter-spacing:.1em;padding:4px 12px;
+    border-radius:20px;font-weight:600;white-space:nowrap;
+  }
+  .u1 .unit-badge{background:rgba(232,160,32,.15);color:var(--unit1);border:1px solid rgba(232,160,32,.3);}
+  .u2 .unit-badge{background:rgba(91,142,240,.15);color:var(--unit2);border:1px solid rgba(91,142,240,.3);}
+  .u3 .unit-badge{background:rgba(63,207,142,.15);color:var(--unit3);border:1px solid rgba(63,207,142,.3);}
+  .u4 .unit-badge{background:rgba(224,90,122,.15);color:var(--unit4);border:1px solid rgba(224,90,122,.3);}
+  .unit-title{
+    font-family:'Playfair Display',serif;
+    font-size:1.05rem;color:var(--white);
+  }
+  .unit-line{flex:1;height:1px;background:var(--border);}
+
+  /* ── TOPIC GROUP ───────────────────────────── */
+  .topic-group{margin-bottom:10px;}
+  .topic-toggle{
+    width:100%;background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:13px 16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;transition:background .2s,border-color .2s;
+    text-align:left;
+  }
+  .topic-toggle:hover{background:var(--card);border-color:var(--muted);}
+  .topic-toggle.open{
+    border-radius:var(--radius) var(--radius) 0 0;
+    border-bottom-color:transparent;
+  }
+  .topic-name{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;color:var(--white);
+    font-weight:600;letter-spacing:.02em;flex:1;
+  }
+  .q-count{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.65rem;color:var(--muted);
+    background:var(--bg);padding:2px 8px;border-radius:10px;
+    white-space:nowrap;
+  }
+  .chevron{
+    color:var(--muted);font-size:.75rem;
+    transition:transform .3s;flex-shrink:0;
+  }
+  .topic-toggle.open .chevron{transform:rotate(180deg);}
+
+  /* ── QUESTIONS LIST ────────────────────────── */
+  .questions-list{
+    background:var(--card);
+    border:1px solid var(--border);border-top:none;
+    border-radius:0 0 var(--radius) var(--radius);
+    overflow:hidden;
+    max-height:0;transition:max-height .4s ease;
+  }
+  .questions-list.open{max-height:9999px;}
+
+  /* ── QUESTION ITEM ─────────────────────────── */
+  .q-item{border-bottom:1px solid var(--border);}
+  .q-item:last-child{border-bottom:none;}
+  .q-trigger{
+    width:100%;background:none;border:none;
+    padding:13px 16px;cursor:pointer;
+    display:flex;align-items:flex-start;gap:12px;
+    text-align:left;transition:background .18s;
+  }
+  .q-trigger:hover{background:rgba(255,255,255,.03);}
+  .q-num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.65rem;color:var(--accent);
+    min-width:22px;margin-top:2px;font-weight:600;
+  }
+  .q-text{
+    font-family:'Lora',serif;font-size:.9rem;
+    color:var(--text);flex:1;line-height:1.5;
+  }
+  .q-arrow{
+    color:var(--muted);font-size:.7rem;
+    margin-top:3px;transition:transform .25s,color .25s;flex-shrink:0;
+  }
+  .q-trigger.open .q-arrow{transform:rotate(90deg);color:var(--accent);}
+  .q-trigger.open .q-text{color:var(--white);}
+
+  /* ── ANSWER ────────────────────────────────── */
+  .q-answer{
+    max-height:0;overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .q-answer.open{max-height:1200px;}
+  .answer-inner{
+    padding:0 16px 14px 50px;
+    font-size:.88rem;line-height:1.75;color:var(--text);
+  }
+  .answer-inner p{margin-bottom:8px;}
+  .answer-inner p:last-child{margin-bottom:0;}
+  .kw{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.8rem;color:var(--accent);font-weight:600;
+  }
+  .kw2{color:var(--accent2);}
+  .kw3{color:var(--green);}
+  .highlight-box{
+    background:rgba(232,160,32,.08);border-left:3px solid var(--accent);
+    padding:8px 12px;border-radius:0 6px 6px 0;
+    margin:8px 0;font-family:'JetBrains Mono',monospace;
+    font-size:.76rem;color:var(--accent);
+  }
+  .tag-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:.65rem;
+    padding:2px 8px;border-radius:10px;
+    background:rgba(91,142,240,.12);color:var(--accent2);
+    border:1px solid rgba(91,142,240,.2);
+  }
+
+  /* ── MARKED / BOOKMARKED ────────────────────── */
+  .q-trigger.marked .q-num{color:var(--green);}
+  .bookmark-btn{
+    background:none;border:none;cursor:pointer;
+    font-size:.8rem;color:var(--muted);padding:4px;
+    transition:color .2s;flex-shrink:0;margin-top:1px;
+  }
+  .bookmark-btn:hover,.bookmark-btn.saved{color:var(--accent);}
+
+  /* ── FLOAT ACTIONS ──────────────────────────── */
+  .fab-row{
+    position:fixed;bottom:20px;right:16px;
+    display:flex;flex-direction:column;gap:10px;z-index:200;
+  }
+  .fab{
+    width:44px;height:44px;border-radius:50%;border:none;
+    cursor:pointer;font-size:1rem;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.5);
+    transition:transform .2s,box-shadow .2s;
+  }
+  .fab:hover{transform:scale(1.1);}
+  .fab-top{background:var(--accent);color:#000;}
+  .fab-expand{background:var(--surface);color:var(--accent);border:1px solid var(--border);}
+
+  /* ── EMPTY STATE ────────────────────────────── */
+  .empty{
+    text-align:center;padding:60px 20px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.8rem;color:var(--muted);display:none;
+  }
+  .empty.show{display:block;}
+
+  /* ── TOAST ──────────────────────────────────── */
+  #toast{
+    position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--surface);border:1px solid var(--border);
+    color:var(--white);font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;padding:8px 18px;border-radius:20px;
+    opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:300;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ── SCROLLBAR ──────────────────────────────── */
+  ::-webkit-scrollbar{width:5px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+  /* ── ANIMATIONS ─────────────────────────────── */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  .unit-section{animation:fadeUp .5s ease both;}
+  .unit-section:nth-child(1){animation-delay:.05s;}
+  .unit-section:nth-child(2){animation-delay:.1s;}
+  .unit-section:nth-child(3){animation-delay:.15s;}
+  .unit-section:nth-child(4){animation-delay:.2s;}
+
+  /* ── HIGHLIGHT SEARCH ───────────────────────── */
+  mark{background:rgba(232,160,32,.25);color:var(--accent);border-radius:2px;padding:0 2px;}
+
+  @media(max-width:480px){
+    header{padding:20px 14px 14px;}
+    .answer-inner{padding:0 12px 12px 38px;}
+    .q-trigger{padding:11px 12px;}
+    .fab{width:40px;height:40px;font-size:.9rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">📚 Exam Prep</div>
+  <h1>Database Management <span>Systems</span></h1>
+  <div class="header-sub">VIVA QUESTION BANK · 4 UNITS · 100+ Q&amp;A</div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search questions or keywords…" autocomplete="off"/>
+  </div>
+  <div id="search-count"></div>
+</header>
+
+<div class="filter-bar">
+  <button class="pill active-all" data-unit="all">All Units</button>
+  <button class="pill" data-unit="1">Unit 1</button>
+  <button class="pill" data-unit="2">Unit 2</button>
+  <button class="pill" data-unit="3">Unit 3</button>
+  <button class="pill" data-unit="4">Unit 4</button>
+</div>
+
+<div class="progress-wrap">
+  <span id="prog-text">0 / 0 answered</span>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<main id="main-content">
+
+<!-- ═══════════════════ UNIT 1 ═══════════════════ -->
+<section class="unit-section u1" data-unit="1">
+  <div class="unit-header">
+    <span class="unit-badge">UNIT 01</span>
+    <span class="unit-title">Foundations & Data Modelling</span>
+    <div class="unit-line"></div>
+  </div>
+
+  <!-- Topic 1 -->
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Basic Concepts: Database & Database Users</span>
+      <span class="q-count">5 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What is a database? How is it different from a file system?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">database</span> is an organized, shared collection of logically related data and metadata, managed by a DBMS. It supports multiple users, enforces integrity, and provides concurrent access.</p>
+            <div class="highlight-box">File System: data redundancy, no relationships, manual integrity, single-user<br>Database: minimal redundancy, relationships enforced, integrity constraints, multi-user</div>
+            <p>Key differences: DBMS offers <span class="kw2">data abstraction</span>, query language support, transaction management, and security control — none of which a flat file system provides natively.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">Who are database users? Name and explain each category.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Database Administrator (DBA)</span> — manages schema, security, performance, backups.</p>
+            <p><span class="kw">Database Designer</span> — defines structure, entities, relationships, constraints.</p>
+            <p><span class="kw">Application Programmers</span> — write programs using DML embedded in host language.</p>
+            <p><span class="kw">End Users</span> — Naïve (via forms/apps), Casual (ad-hoc queries), Sophisticated (power analysts), Standalone (personal DB).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is metadata? Why is it important in a DBMS?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Metadata</span> is "data about data" — it describes the structure, types, constraints, and relationships of actual data, stored in the <span class="kw2">data dictionary / system catalog</span>.</p>
+            <p>It is important because the DBMS uses it to validate queries, enforce constraints, optimize execution, and provide data independence.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is data redundancy and how does DBMS control it?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Data redundancy</span> means storing the same data in multiple places. It leads to inconsistency, wasted storage, and update anomalies.</p>
+            <p>DBMS controls it through <span class="kw2">normalization</span>, centralized schema definition, and enforcing referential integrity — so each fact is stored once and referenced by all who need it.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">Define data integrity and list its types.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Data integrity</span> ensures accuracy and consistency of data over its lifecycle. Types:</p>
+            <p>• <span class="kw2">Entity Integrity</span> — every row has a unique, non-null primary key.<br>
+               • <span class="kw2">Referential Integrity</span> — foreign key values must match existing primary keys.<br>
+               • <span class="kw2">Domain Integrity</span> — values must conform to defined type/range.<br>
+               • <span class="kw2">User-defined Integrity</span> — business rules enforced via CHECK/TRIGGER.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 2 -->
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Characteristics of Database Systems</span>
+      <span class="q-count">4 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What are the main characteristics/advantages of the database approach?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>1. <span class="kw">Self-describing nature</span> — catalog stores schema alongside data.<br>
+               2. <span class="kw">Insulation between programs and data</span> — data independence.<br>
+               3. <span class="kw">Data abstraction</span> — conceptual view hides physical details.<br>
+               4. <span class="kw">Multiple views</span> — different users see different subsets.<br>
+               5. <span class="kw">Data sharing &amp; multiuser transaction processing</span> — concurrency control.<br>
+               6. <span class="kw">Controlling redundancy</span> — central schema eliminates duplication.<br>
+               7. <span class="kw">Enforcing integrity constraints</span>, <span class="kw">Security restrictions</span>, <span class="kw">Backup &amp; Recovery</span>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">When is it NOT suitable to use a DBMS?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>DBMS overhead may be unjustified when:</p>
+            <p>• Data is simple, well-defined, and won't change.<br>
+               • Only a single user needs access.<br>
+               • Real-time embedded system with no multi-user need.<br>
+               • Organization cannot afford DBMS licensing/maintenance.<br>
+               • Application needs extreme speed with no concurrency (e.g., sensor logging).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">Explain the self-describing nature of a database system.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A DBMS contains not only the data itself but also a <span class="kw">system catalog (data dictionary)</span> that stores the complete definition (schema) of the database structure.</p>
+            <p>This allows the DBMS to work with different databases without needing hard-coded schema information — unlike traditional file-processing where programs must know file format in advance.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is meant by "program-data independence"?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Program-data independence</span> means the application programs do not depend on how data is physically stored. You can change storage format, file organization, or access paths without rewriting application code.</p>
+            <p>This is achieved through the DBMS's abstraction layer — programs interact with the <span class="kw2">logical schema</span>, not the physical storage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 3 -->
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Data Models, Schemas & Instances</span>
+      <span class="q-count">5 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What is a data model? Name the major types.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">data model</span> is a set of concepts used to describe the structure, relationships, and constraints of a database.</p>
+            <p>Types: <span class="kw2">High-level (Conceptual)</span> — ER model; <span class="kw2">Representational (Implementation)</span> — Relational, Network, Hierarchical; <span class="kw2">Low-level (Physical)</span> — describes how data is stored on disk.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is the difference between a schema and an instance?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <div class="highlight-box">Schema = structure (blueprint) · rarely changes<br>Instance = actual data at a point in time · changes often</div>
+            <p>The <span class="kw">schema</span> is the overall design — table names, columns, types, constraints. An <span class="kw2">instance</span> (also called <em>database state</em> or <em>extension</em>) is the set of data stored at a particular moment.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">Differentiate between conceptual, internal, and external schemas.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">External/View level</span> — what individual users see (user views).<br>
+               <span class="kw">Conceptual/Logical level</span> — describes what data is stored and relationships; hides physical details.<br>
+               <span class="kw">Internal/Physical level</span> — how data is actually stored, indexes, file organization.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is data independence? Explain its two types.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Logical Data Independence</span> — ability to change the conceptual schema without changing external schemas/application programs. Harder to achieve.</p>
+            <p><span class="kw">Physical Data Independence</span> — ability to change the internal schema (storage) without changing the conceptual schema. More commonly achieved in most DBMS.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is a three-schema architecture and why was it proposed?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>The <span class="kw">three-schema architecture</span> (ANSI/SPARC) separates the database into external, conceptual, and internal levels. It was proposed to achieve:</p>
+            <p>• Data independence (logical &amp; physical)<br>
+               • Separation of user views from physical storage<br>
+               • Support for multiple user perspectives simultaneously<br>
+               • Portability across different hardware/OS platforms</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 4 -->
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">ER Model & Enhanced ER Concepts</span>
+      <span class="q-count">7 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What are the basic components of an ER diagram?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Entity</span> — object with independent existence (rectangle).<br>
+               <span class="kw">Attribute</span> — property of entity (ellipse). Types: simple, composite, multivalued (double ellipse), derived (dashed).<br>
+               <span class="kw">Relationship</span> — association between entities (diamond).<br>
+               <span class="kw">Weak Entity</span> — cannot be identified alone; depends on owner (double rectangle).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is a weak entity? How is it different from a strong entity?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">weak entity</span> does not have a key attribute of its own; it is identified by its relationship to an owner (strong) entity plus its <span class="kw2">partial key (discriminator)</span>.</p>
+            <p>Example: <em>DEPENDENT</em> is weak; identified by (Employee_SSN + Dependent_Name). A strong entity has its own primary key and exists independently.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">Explain cardinality ratios in ER relationships.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">1:1</span> — one entity on each side (e.g., Employee MANAGES Department).<br>
+               <span class="kw">1:N</span> — one on left, many on right (e.g., Department HAS Employees).<br>
+               <span class="kw">M:N</span> — many on both sides (e.g., Student ENROLLS IN Courses).</p>
+            <p>Cardinality constrains how many instances of one entity relate to instances of another.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is specialization and generalization? How do they differ?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Specialization</span> is a top-down process — starting with a general entity (superclass) and defining sub-entities (subclasses) with unique attributes. E.g., EMPLOYEE → ENGINEER, MANAGER.</p>
+            <p><span class="kw">Generalization</span> is the bottom-up reverse — combining similar entities into a general superclass. E.g., CAR + TRUCK → VEHICLE.</p>
+            <div class="highlight-box">Specialization = superclass → subclasses (top-down)<br>Generalization = subclasses → superclass (bottom-up)</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is aggregation in ER? Why is it needed?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Aggregation</span> treats a relationship set (and its participating entities) as a higher-level entity, allowing it to participate in another relationship.</p>
+            <p>It is needed when a relationship itself needs to have a relationship with another entity — which cannot be directly represented in standard ER. Shown as a rectangle around the relationship diamond.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">What is the disjoint vs. overlapping constraint in EER?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Disjoint (d)</span> — an entity can belong to at most one subclass at a time (mutually exclusive). E.g., EMPLOYEE is either HOURLY or SALARIED.<br>
+               <span class="kw">Overlapping (o)</span> — an entity can belong to multiple subclasses simultaneously. E.g., a STUDENT can be both GRADUATE_STUDENT and TEACHING_ASSISTANT.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q7</span>
+          <span class="q-text">How do you map an M:N relationship from ER to the relational model?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>An M:N relationship is mapped by creating a new <span class="kw">cross-reference (junction/associative) relation</span>. This new relation includes:</p>
+            <p>• Primary keys of both participating entity relations as foreign keys.<br>
+               • Both FK together form the primary key of the junction table.<br>
+               • Any attributes of the relationship are also added to this table.</p>
+            <div class="highlight-box">STUDENT(sid) + COURSE(cid) → ENROLL(sid, cid, grade)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topic 5 -->
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">SQL — DDL, DML, DCL, Constraints & Views</span>
+      <span class="q-count">8 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What are DDL, DML, and DCL? Give examples of each.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">DDL (Data Definition Language)</span> — defines schema: <span class="kw2">CREATE, ALTER, DROP, TRUNCATE</span>.<br>
+               <span class="kw">DML (Data Manipulation Language)</span> — manipulates data: <span class="kw2">SELECT, INSERT, UPDATE, DELETE</span>.<br>
+               <span class="kw">DCL (Data Control Language)</span> — controls access: <span class="kw2">GRANT, REVOKE</span>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is the difference between DELETE, TRUNCATE, and DROP?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">DELETE</span> — DML, removes rows with WHERE condition, can be rolled back, triggers fire, slower.<br>
+               <span class="kw">TRUNCATE</span> — DDL, removes ALL rows quickly, cannot be rolled back (in most DBMS), no WHERE, resets identity.<br>
+               <span class="kw">DROP</span> — DDL, removes the entire table/object including structure and data permanently.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">Explain all SQL constraints with syntax examples.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">PRIMARY KEY</span> — unique + not null, one per table.<br>
+               <span class="kw">FOREIGN KEY</span> — references PK of another table, enforces referential integrity.<br>
+               <span class="kw">UNIQUE</span> — no duplicate values, allows one NULL.<br>
+               <span class="kw">NOT NULL</span> — column must have a value.<br>
+               <span class="kw">CHECK</span> — value must satisfy a Boolean expression: <span class="kw2">CHECK(age &gt;= 18)</span>.<br>
+               <span class="kw">DEFAULT</span> — assigns a value when none is provided.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is a VIEW? What are its advantages and limitations?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">VIEW</span> is a virtual table defined by a SELECT query. It has no physical storage.</p>
+            <p><span class="kw3">Advantages</span>: data security (hides columns), logical data independence, simplifies complex queries, tailors user perspectives.</p>
+            <p><span class="kw">Limitations</span>: cannot always be updated (non-updatable views); performance overhead since view query is re-executed each time; cannot have indexes directly (unless materialized).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is an index? What are its types?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>An <span class="kw">index</span> is a data structure (like a B+ tree) that speeds up data retrieval at the cost of extra storage and slower writes.</p>
+            <p>Types: <span class="kw2">Clustered</span> (data rows sorted by index key, one per table) vs <span class="kw2">Non-clustered</span> (separate structure, many allowed). Also: <span class="kw2">Unique</span>, <span class="kw2">Composite</span>, <span class="kw2">Full-text</span>.</p>
+            <div class="highlight-box">CREATE INDEX idx_name ON table(column);</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">What is the difference between PRIMARY KEY and UNIQUE constraint?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">PRIMARY KEY</span>: Only one per table; cannot contain NULL values; automatically creates a clustered index.</p>
+            <p><span class="kw">UNIQUE</span>: Multiple per table; allows one NULL (in most DBMS); creates a non-clustered index by default. Both enforce uniqueness but PK is the main identifier.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q7</span>
+          <span class="q-text">What does ALTER TABLE do? Give examples.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">ALTER TABLE</span> modifies an existing table's structure without losing data.</p>
+            <div class="highlight-box">ALTER TABLE emp ADD salary DECIMAL(10,2);<br>ALTER TABLE emp MODIFY name VARCHAR(100);<br>ALTER TABLE emp DROP COLUMN age;<br>ALTER TABLE emp ADD CONSTRAINT fk_dept FOREIGN KEY(dno) REFERENCES dept(dno);</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q8</span>
+          <span class="q-text">What is a database language? What are its components?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">database language</span> allows users to define, manipulate, and control data. SQL combines:</p>
+            <p>• <span class="kw2">DDL</span> — schema definition<br>
+               • <span class="kw2">DML</span> — data retrieval &amp; modification<br>
+               • <span class="kw2">DCL</span> — access control<br>
+               • <span class="kw2">TCL</span> — transaction control (COMMIT, ROLLBACK, SAVEPOINT)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ UNIT 2 ═══════════════════ -->
+<section class="unit-section u2" data-unit="2">
+  <div class="unit-header">
+    <span class="unit-badge">UNIT 02</span>
+    <span class="unit-title">Relational Model & Advanced SQL</span>
+    <div class="unit-line"></div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Relational Model — Concepts, Constraints & Algebra</span>
+      <span class="q-count">6 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">Define relation, tuple, attribute, and degree/cardinality.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Relation</span> — a table with rows and columns.<br>
+               <span class="kw">Tuple</span> — a single row in the relation.<br>
+               <span class="kw">Attribute</span> — a column; has a domain (allowed values).<br>
+               <span class="kw">Degree</span> — number of attributes (columns).<br>
+               <span class="kw">Cardinality</span> — number of tuples (rows).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is relational algebra? List its fundamental operations.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Relational Algebra</span> is a procedural query language operating on relations and returning relations.</p>
+            <p>Fundamental: <span class="kw2">σ (Select)</span>, <span class="kw2">π (Project)</span>, <span class="kw2">∪ (Union)</span>, <span class="kw2">− (Set Difference)</span>, <span class="kw2">× (Cartesian Product)</span>, <span class="kw2">ρ (Rename)</span>.</p>
+            <p>Derived: <span class="kw2">⋈ (Join)</span>, <span class="kw2">∩ (Intersection)</span>, <span class="kw2">÷ (Division)</span>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is the difference between relational algebra and relational calculus?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Relational Algebra</span> is <em>procedural</em> — specifies HOW to get data (sequence of operations).</p>
+            <p><span class="kw">Relational Calculus</span> is <em>declarative</em> — specifies WHAT data to get without describing procedure. Two types: <span class="kw2">Tuple Relational Calculus (TRC)</span> and <span class="kw2">Domain Relational Calculus (DRC)</span>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What are the conditions for a UNION operation in relational algebra?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>Two relations must be <span class="kw">union-compatible</span>:</p>
+            <p>1. Same number of attributes (same degree).<br>
+               2. Corresponding attributes have the same domain.<br>
+               This also applies to <span class="kw2">INTERSECTION</span> and <span class="kw2">SET DIFFERENCE</span>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is referential integrity? What are the violation actions?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Referential Integrity</span>: A FK value in a child table must either be NULL or match an existing PK value in the referenced (parent) table.</p>
+            <p>Violation actions on parent row DELETE/UPDATE: <span class="kw2">RESTRICT/NO ACTION</span>, <span class="kw2">CASCADE</span> (propagate change), <span class="kw2">SET NULL</span>, <span class="kw2">SET DEFAULT</span>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">Explain the concept of a superkey, candidate key, and primary key.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Superkey</span> — any set of attributes that uniquely identifies tuples (may include extra attributes).<br>
+               <span class="kw">Candidate Key</span> — minimal superkey (no unnecessary attributes). A relation may have multiple.<br>
+               <span class="kw">Primary Key</span> — the chosen candidate key used as the main unique identifier; must be NOT NULL.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">SQL Functions, Sub-queries & Joins</span>
+      <span class="q-count">8 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What are aggregate functions in SQL? List them.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>Aggregate functions operate on sets of values and return a single value:</p>
+            <p><span class="kw2">COUNT()</span> — number of rows; <span class="kw2">SUM()</span> — total of numeric column; <span class="kw2">AVG()</span> — average; <span class="kw2">MIN()</span> / <span class="kw2">MAX()</span> — extremes.</p>
+            <p>Note: <span class="kw">COUNT(*)</span> counts all rows including NULLs; <span class="kw">COUNT(col)</span> ignores NULLs.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">Explain GROUP BY and HAVING with an example.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">GROUP BY</span> groups rows sharing the same value for the given column(s) so aggregates can be computed per group.</p>
+            <p><span class="kw">HAVING</span> filters groups (like WHERE but for aggregated results).</p>
+            <div class="highlight-box">SELECT dept, COUNT(*) AS cnt<br>FROM employee<br>GROUP BY dept<br>HAVING COUNT(*) > 5;</div>
+            <p>Execution order: WHERE → GROUP BY → HAVING → SELECT → ORDER BY.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is a sub-query? What is a correlated sub-query?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">sub-query</span> is a SELECT nested within another SQL statement. It executes once and passes result to the outer query.</p>
+            <p>A <span class="kw">correlated sub-query</span> references columns from the outer query — it is re-evaluated for EACH row of the outer query, making it dependent and usually slower.</p>
+            <div class="highlight-box">-- Correlated: finds employees earning more than dept avg<br>SELECT name FROM emp e1<br>WHERE salary > (SELECT AVG(salary) FROM emp e2 WHERE e2.dno=e1.dno);</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What are the types of JOINs in SQL? Explain each.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">INNER JOIN</span> — returns only matching rows from both tables.<br>
+               <span class="kw">LEFT (OUTER) JOIN</span> — all rows from left + matching from right; NULLs where no match.<br>
+               <span class="kw">RIGHT (OUTER) JOIN</span> — all rows from right + matching from left.<br>
+               <span class="kw">FULL (OUTER) JOIN</span> — all rows from both; NULLs where no match on either side.<br>
+               <span class="kw">CROSS JOIN</span> — Cartesian product (all combinations).<br>
+               <span class="kw">SELF JOIN</span> — table joined with itself using aliases.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">Explain ANY, ALL, and EXISTS operators.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">ANY / SOME</span> — TRUE if the condition is satisfied for at least one value returned by subquery. E.g., <span class="kw2">sal > ANY(subquery)</span> means sal &gt; minimum of subquery.<br>
+               <span class="kw">ALL</span> — TRUE only if condition holds for every value. <span class="kw2">sal > ALL(subquery)</span> means sal &gt; maximum.<br>
+               <span class="kw">EXISTS</span> — TRUE if subquery returns at least one row; used to test for existence, typically with correlated sub-queries.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">What is the difference between WHERE and HAVING?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">WHERE</span> — filters individual rows BEFORE grouping; cannot use aggregate functions.<br>
+               <span class="kw">HAVING</span> — filters groups AFTER GROUP BY; can use aggregate functions.</p>
+            <div class="highlight-box">WHERE filters rows · HAVING filters groups</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q7</span>
+          <span class="q-text">What are UNION, INTERSECT, and EXCEPT/MINUS set operations?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">UNION</span> — combines results of two SELECT queries, removes duplicates (use UNION ALL to keep).<br>
+               <span class="kw">INTERSECT</span> — returns only rows present in BOTH results.<br>
+               <span class="kw">EXCEPT / MINUS</span> — returns rows in first result not in second.<br>
+               All require union-compatible queries (same number and type of columns).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q8</span>
+          <span class="q-text">What are TCL commands? Explain COMMIT, ROLLBACK, SAVEPOINT.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">COMMIT</span> — permanently saves all changes made in the current transaction. After commit, changes cannot be rolled back.</p>
+            <p><span class="kw">ROLLBACK</span> — undoes all changes since the last COMMIT or SAVEPOINT, restoring the database to a consistent state.</p>
+            <p><span class="kw">SAVEPOINT</span> — creates a named intermediate point within a transaction. ROLLBACK TO savept undoes changes only to that point.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ UNIT 3 ═══════════════════ -->
+<section class="unit-section u3" data-unit="3">
+  <div class="unit-header">
+    <span class="unit-badge">UNIT 03</span>
+    <span class="unit-title">Normalization, Transactions & Concurrency</span>
+    <div class="unit-line"></div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Functional Dependencies & Normal Forms (1NF–BCNF)</span>
+      <span class="q-count">8 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What is a functional dependency? Define types.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">Functional Dependency (FD)</span> X → Y means: for any two tuples, if they agree on X, they must agree on Y. X <em>functionally determines</em> Y.</p>
+            <p>Types: <span class="kw2">Full FD</span> — Y depends on all of X (not a proper subset); <span class="kw2">Partial FD</span> — Y depends on a proper subset of X; <span class="kw2">Transitive FD</span> — X→Z through X→Y→Z where Y is not a key.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is 1NF? How do you convert to it?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A relation is in <span class="kw">1NF (First Normal Form)</span> if all attribute values are <em>atomic</em> (indivisible) and there are no repeating groups or multi-valued attributes.</p>
+            <p>To convert: replace multi-valued attributes with separate rows or a separate table; ensure each cell holds a single value; add a primary key.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is 2NF? What anomaly does it fix?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A relation is in <span class="kw">2NF</span> if it is in 1NF AND every non-key attribute is <em>fully functionally dependent</em> on the entire primary key (no partial dependencies).</p>
+            <p>Fixes: <span class="kw2">Insertion anomaly</span> (can't insert fact without another), <span class="kw2">Update anomaly</span> (must update many rows), <span class="kw2">Deletion anomaly</span> (deleting one fact deletes another).</p>
+            <p>Only relevant when the PK is composite. Remove partial dependencies by decomposing into separate relations.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is 3NF? How does it differ from 2NF?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A relation is in <span class="kw">3NF</span> if it is in 2NF AND there are <em>no transitive dependencies</em> — no non-key attribute depends on another non-key attribute.</p>
+            <div class="highlight-box">3NF: For every FD X→Y, either X is a superkey, or Y is part of some candidate key.</div>
+            <p>2NF removes partial dependencies; 3NF additionally removes transitive dependencies of non-prime attributes on non-key attributes.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is BCNF? When does a relation satisfy 3NF but not BCNF?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">BCNF (Boyce-Codd Normal Form)</span> is a stronger version of 3NF: for every non-trivial FD X→Y, X must be a superkey.</p>
+            <p>A relation satisfies 3NF but NOT BCNF when a non-prime attribute functionally determines part of a candidate key, i.e., when there are overlapping candidate keys where a determinant is not a superkey.</p>
+            <p>BCNF decomposition always achieves lossless join but may not preserve all FDs.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">What is lossless join decomposition?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A decomposition of R into R1 and R2 is <span class="kw">lossless</span> if joining R1 ⋈ R2 reproduces exactly R with no spurious tuples.</p>
+            <p>Condition (for binary decomposition): the common attributes of R1 and R2 must form a superkey of R1 OR R2. This is tested using the <span class="kw2">FD-based test</span>: R1∩R2 → R1 − R2 or R1∩R2 → R2 − R1.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q7</span>
+          <span class="q-text">What is dependency-preserving decomposition?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A decomposition is <span class="kw">dependency-preserving</span> if every functional dependency in the original relation F can be checked in one of the decomposed relations, i.e., the union of FDs projected onto each sub-relation implies all original FDs.</p>
+            <p>BCNF may not preserve dependencies; 3NF decomposition always can.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q8</span>
+          <span class="q-text">What are 4NF and 5NF? What dependencies do they address?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">4NF</span> — addresses <em>Multivalued Dependencies (MVDs)</em>. A relation is in 4NF if for every non-trivial MVD X ↠ Y, X is a superkey. MVDs occur when one attribute in a table uniquely determines multiple independent sets of another attribute.</p>
+            <p><span class="kw">5NF (PJNF)</span> — addresses <em>Join Dependencies</em>. A relation is in 5NF if every join dependency is implied by candidate keys. Very rarely applied in practice.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Transactions — ACID, States & Schedules</span>
+      <span class="q-count">7 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What are the ACID properties of a transaction?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Atomicity</span> — all or nothing; either all operations complete or none take effect (handled by recovery).</p>
+            <p><span class="kw">Consistency</span> — transaction takes DB from one valid state to another, preserving all constraints.</p>
+            <p><span class="kw">Isolation</span> — concurrent transactions appear to execute serially; intermediate state not visible to others (handled by concurrency control).</p>
+            <p><span class="kw">Durability</span> — once committed, changes persist even after system failure (handled by recovery/logging).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">Draw and explain the transaction state diagram.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <div class="highlight-box">Active → Partially Committed → Committed<br>Active → Failed → Aborted<br>Partially Committed → Failed (on write error)</div>
+            <p><span class="kw2">Active</span>: transaction is executing.<br>
+               <span class="kw2">Partially Committed</span>: last statement executed; changes in buffer.<br>
+               <span class="kw2">Committed</span>: changes permanently written to disk.<br>
+               <span class="kw2">Failed</span>: error detected, cannot proceed.<br>
+               <span class="kw2">Aborted</span>: rolled back; DB restored to pre-transaction state.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is serializability? What are its types?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A concurrent schedule is <span class="kw">serializable</span> if it produces the same result as some serial execution of the same transactions.</p>
+            <p><span class="kw2">Conflict Serializable</span>: can be transformed to a serial schedule by swapping non-conflicting operations. Tested via a <em>precedence graph</em> — acyclic = conflict serializable.</p>
+            <p><span class="kw2">View Serializable</span>: broader notion — same reads, same writes as some serial schedule. Every conflict-serializable schedule is view-serializable but not vice versa.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What are locking techniques? Explain shared and exclusive locks.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Shared Lock (S / Read Lock)</span> — allows concurrent reads but not writes. Multiple transactions can hold S-locks on the same item simultaneously.</p>
+            <p><span class="kw">Exclusive Lock (X / Write Lock)</span> — allows read and write but no other lock (S or X) can coexist. Only one transaction holds X-lock.</p>
+            <p><span class="kw2">Two-Phase Locking (2PL)</span>: Growing phase (acquire locks) → Shrinking phase (release locks). 2PL ensures conflict serializability.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is timestamp ordering? How does it work?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>Each transaction T is given a unique timestamp <span class="kw">TS(T)</span> when it starts. Each data item Q maintains <span class="kw2">read_TS(Q)</span> and <span class="kw2">write_TS(Q)</span>.</p>
+            <p>Rules: A READ by T is rejected if TS(T) &lt; write_TS(Q) (Q was already written by a younger transaction). A WRITE is rejected if TS(T) &lt; read_TS(Q) or TS(T) &lt; write_TS(Q). Rejected transactions are rolled back and restarted with a newer timestamp.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">What is deadlock? How is it detected and resolved?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">deadlock</span> occurs when two or more transactions wait for each other to release locks, creating a cycle. None can proceed.</p>
+            <p><span class="kw2">Detection</span>: Maintain a <em>wait-for graph</em>; a cycle indicates deadlock. Run periodically.</p>
+            <p><span class="kw2">Resolution</span>: Select a <em>victim</em> transaction (lowest cost), roll it back and release locks. Prevention techniques: Wait-Die, Wound-Wait, No-wait, Timeout.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q7</span>
+          <span class="q-text">What is a recoverable schedule? What is a cascadeless schedule?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Recoverable Schedule</span>: If transaction T reads a value written by T', then T' must commit before T commits. Otherwise, if T' aborts after T commits, T has read a "dirty" uncommitted value.</p>
+            <p><span class="kw">Cascadeless (Avoids Cascading Rollback)</span>: A transaction can only read values written by committed transactions. Stricter than recoverable; prevents "cascading abort" ripple effect.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Recovery Techniques & Database Programming</span>
+      <span class="q-count">6 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What is a stored procedure? What are its advantages?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">stored procedure</span> is a precompiled set of SQL statements stored in the database and executed by name. It can accept parameters and return values.</p>
+            <p><span class="kw3">Advantages</span>: Reduced network traffic (one call, many statements); precompiled = faster execution; code reusability; centralized business logic; security (users call procedure, not tables directly).</p>
+            <div class="highlight-box">CREATE PROCEDURE proc_name(param TYPE) AS BEGIN ... END;</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is a trigger? What are its components?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">trigger</span> is a named database object that automatically executes (fires) in response to a specified event on a table or view.</p>
+            <p>Components: <span class="kw2">Event</span> (INSERT/UPDATE/DELETE), <span class="kw2">Timing</span> (BEFORE/AFTER/INSTEAD OF), <span class="kw2">Level</span> (ROW or STATEMENT), <span class="kw2">Condition</span> (optional WHEN clause), <span class="kw2">Action</span> (PL/SQL body).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is the difference between a stored procedure and a function?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Function</span>: Must return a value; can be used in SELECT; cannot modify database state (in most DB); called in expressions.<br>
+               <span class="kw">Stored Procedure</span>: May or may not return values (via OUT params); cannot be used directly in SELECT; can perform DML; called with EXECUTE/CALL.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is a log (write-ahead log)? How is it used in recovery?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>The <span class="kw">Write-Ahead Log (WAL)</span> records all changes to the DB before they are applied to disk. Each log record contains: transaction ID, data item, old value (for UNDO), new value (for REDO).</p>
+            <p>Recovery: <span class="kw2">REDO</span> committed transactions whose changes may not have reached disk; <span class="kw2">UNDO</span> uncommitted transactions that were active during crash.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is a checkpoint in database recovery?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">checkpoint</span> is a snapshot point where the DBMS flushes all dirty (modified) buffers to disk and records the current transaction list in the log.</p>
+            <p>During recovery, only transactions after the last checkpoint need to be examined — reducing recovery time significantly. Checkpoints limit how far back REDO/UNDO operations must go.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">What is granularity of data items? What is multigranularity locking?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Granularity</span> refers to the size of data items on which locks are set: Field → Record (Row) → Page → Table → Database.</p>
+            <p>Fine granularity = more parallelism but high overhead (many locks). Coarse granularity = less overhead but less concurrency.</p>
+            <p><span class="kw2">Multigranularity locking</span> uses <em>intention locks</em> (IS, IX, SIX) at higher levels to indicate intent to lock lower levels, allowing efficient compatibility checking without traversing the whole hierarchy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ UNIT 4 ═══════════════════ -->
+<section class="unit-section u4" data-unit="4">
+  <div class="unit-header">
+    <span class="unit-badge">UNIT 04</span>
+    <span class="unit-title">File Structures, Indexing & Advanced DBMS</span>
+    <div class="unit-line"></div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">File Structures — Heap, Sorted, Hashing</span>
+      <span class="q-count">5 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What is a heap file? When is it used?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">heap file</span> (unordered file) stores records in insertion order with no particular arrangement. New records are appended at the end.</p>
+            <p><span class="kw3">Pros</span>: Fast insertion O(1). <span class="kw">Cons</span>: Linear scan for search O(n). Used when: data is frequently inserted and bulk-scanned, or when queries don't filter on a specific key.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is a sorted file? What are its advantages?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">sorted file</span> maintains records in sorted order on an ordering field. Enables binary search — O(log n) for search.</p>
+            <p><span class="kw3">Advantages</span>: Fast range queries, efficient sequential access, supports ordered output without sorting. <span class="kw">Disadvantages</span>: Costly insertions (maintain sort order), may need overflow pages.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is hashing? Explain static vs. dynamic hashing.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Hashing</span> applies a hash function h(key) to determine the bucket where a record is stored. O(1) average access time.</p>
+            <p><span class="kw2">Static Hashing</span>: Fixed number of buckets M; h(k) = k mod M. Problem: overflow when data grows. <span class="kw2">Dynamic Hashing</span> (Extendible/Linear): Adjusts number of buckets as data grows, avoiding overflow by splitting or expanding bucket directory.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is a collision in hashing? How is it handled?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">collision</span> occurs when two different keys hash to the same bucket.</p>
+            <p>Resolution methods: <span class="kw2">Open Addressing</span> (linear/quadratic probing — find next empty slot), <span class="kw2">Chaining</span> (linked list of overflow records per bucket), <span class="kw2">Overflow Pages</span> (linked extra pages to the full bucket).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What operations are performed on files? Explain each briefly.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw2">Open</span> — prepare file for access (load header, set pointer).<br>
+               <span class="kw2">Close</span> — flush buffers, release resources.<br>
+               <span class="kw2">Reset</span> — move pointer to start for re-reading.<br>
+               <span class="kw2">Find</span> — locate first record satisfying condition.<br>
+               <span class="kw2">Read</span> — retrieve current record.<br>
+               <span class="kw2">FindNext</span> — locate next matching record.<br>
+               <span class="kw2">Insert / Delete / Modify</span> — write operations.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">Single-Level, Multi-Level Indexes & B/B+ Trees</span>
+      <span class="q-count">6 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What is a single-level index? Name its types.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">single-level index</span> is a sorted file of (key, pointer to record) pairs. Binary search on index is faster than linear search on data file.</p>
+            <p>Types: <span class="kw2">Primary Index</span> — on ordered key field of sorted file; one entry per block (sparse). <span class="kw2">Clustering Index</span> — on non-key ordering field; one entry per distinct value. <span class="kw2">Secondary Index</span> — on non-ordering field; dense (one entry per record).</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What is a multilevel index? Why is it needed?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>When the primary index itself becomes too large for binary search to be efficient, a <span class="kw">multilevel index</span> treats the first-level index as a data file and builds another index over it — recursively, until the top level fits in one disk block.</p>
+            <p>This is the idea behind <span class="kw2">B-tree and B+ tree</span> structures which self-maintain balance as data changes.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is a B-tree? How does it differ from a B+ tree?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">B-tree</span> of order m: each node has up to m-1 keys and m pointers; balanced (all leaves at same level); data pointers at every node (internal and leaf).</p>
+            <p>A <span class="kw">B+ tree</span>: data pointers ONLY at leaf nodes; internal nodes store only keys for routing; all leaves linked in a doubly linked list for efficient range queries. B+ trees are preferred in DBMS because sequential access is much faster.</p>
+            <div class="highlight-box">B-tree: data at every node · B+ tree: data only at leaves, leaves linked</div>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What are the properties of a B+ tree of order p?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>Internal node: at most p tree pointers; at most p-1 keys; at least ⌈p/2⌉ pointers (except root).</p>
+            <p>Leaf node: at most p-1 (key, data pointer) pairs; at least ⌈(p-1)/2⌉ pairs; one pointer to next leaf.</p>
+            <p>Root: at least 2 pointers (if not leaf). Height h ≤ log⌈p/2⌉(N) where N is number of keys.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What is a dense vs. sparse index?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Dense Index</span> — one index entry for every record in the data file. Faster search but more storage. Used for secondary indexes.</p>
+            <p><span class="kw">Sparse Index</span> — one entry per disk block (or per distinct value). Smaller index; requires the data file to be sorted on the index key. Primary indexes are usually sparse.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q6</span>
+          <span class="q-text">What are secondary storage devices? What is the disk access time?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>Secondary storage (magnetic disk, SSD, HDD) provides persistent, large-capacity storage. Data is organized in <span class="kw">blocks/pages</span> (typical 4KB–16KB).</p>
+            <p>Disk access time = <span class="kw2">Seek time</span> (move head to track) + <span class="kw2">Rotational delay</span> (wait for block) + <span class="kw2">Transfer time</span> (read/write block). Minimizing disk I/O is the primary goal of file organization and indexing strategies.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="topic-group">
+    <button class="topic-toggle" onclick="toggleTopic(this)">
+      <span class="topic-name">OODBMS & Distributed DBMS</span>
+      <span class="q-count">5 Q</span>
+      <span class="chevron">▼</span>
+    </button>
+    <div class="questions-list">
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q1</span>
+          <span class="q-text">What is an Object-Oriented DBMS (OODBMS)? How is it different from RDBMS?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>An <span class="kw">OODBMS</span> stores data as objects (as in OOP), supporting complex data types, inheritance, encapsulation, and methods alongside data.</p>
+            <p>RDBMS stores data in tables (rows/columns), uses SQL, handles simple types well. OODBMS is better for CAD, multimedia, engineering apps. RDBMS wins for business/financial data needing ACID, joins, and ad-hoc queries.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q2</span>
+          <span class="q-text">What are the key features/concepts of OODBMS?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>• <span class="kw2">Object identity (OID)</span> — each object has a unique, system-generated ID.<br>
+               • <span class="kw2">Encapsulation</span> — data and methods bundled together.<br>
+               • <span class="kw2">Inheritance</span> — classes inherit attributes/methods from superclasses.<br>
+               • <span class="kw2">Polymorphism</span> — same operation behaves differently in different subclasses.<br>
+               • <span class="kw2">Complex objects</span> — support for nested/composite types.<br>
+               • <span class="kw2">Persistence</span> — objects persist beyond program execution.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q3</span>
+          <span class="q-text">What is a Distributed DBMS (DDBMS)?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p>A <span class="kw">DDBMS</span> is a collection of logically interrelated databases distributed over a computer network, managed so they appear as a single database to the user.</p>
+            <p>Key properties: <span class="kw2">Local autonomy</span>, <span class="kw2">No reliance on a central site</span>, <span class="kw2">Continuous operation</span>, <span class="kw2">Location independence</span>, <span class="kw2">Fragmentation independence</span>, <span class="kw2">Replication independence</span>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q4</span>
+          <span class="q-text">What is data fragmentation in DDBMS? Name its types.</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw">Fragmentation</span> divides a relation into pieces stored at different sites.</p>
+            <p><span class="kw2">Horizontal Fragmentation</span> — each fragment is a subset of rows (σ condition).<br>
+               <span class="kw2">Vertical Fragmentation</span> — each fragment is a subset of columns (π columns); must include primary key in each.<br>
+               <span class="kw2">Mixed/Hybrid</span> — combination of horizontal and vertical.</p>
+          </div>
+        </div>
+      </div>
+      <div class="q-item">
+        <button class="q-trigger" onclick="toggleAnswer(this)">
+          <span class="q-num">Q5</span>
+          <span class="q-text">What are the advantages and challenges of DDBMS?</span>
+          <span class="q-arrow">▶</span>
+        </button>
+        <div class="q-answer">
+          <div class="answer-inner">
+            <p><span class="kw3">Advantages</span>: Improved reliability (no single point of failure), better performance (local access), scalability, data sharing across locations.</p>
+            <p><span class="kw">Challenges</span>: Complexity of distributed query optimization, network dependency, distributed transaction management (2-phase commit protocol), maintaining consistency across replicas, higher overhead for joins across sites, security across multiple nodes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="empty" id="empty-state">🔍 No questions match your search. Try different keywords.</div>
+</main>
+
+<div class="fab-row">
+  <button class="fab fab-expand" onclick="toggleAll()" title="Expand/Collapse All">⊞</button>
+  <button class="fab fab-top" onclick="scrollToTop()" title="Back to Top">↑</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ── TOGGLE TOPIC ──────────────────────────────── */
+function toggleTopic(btn){
+  const list = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  list.classList.toggle('open', !isOpen);
+}
+
+/* ── TOGGLE ANSWER ─────────────────────────────── */
+function toggleAnswer(btn){
+  const answer = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  answer.classList.toggle('open', !isOpen);
+  if(!isOpen) updateProgress();
+}
+
+/* ── FILTER PILLS ──────────────────────────────── */
+const pills = document.querySelectorAll('.pill');
+let activeUnit = 'all';
+pills.forEach(p => p.addEventListener('click', () => {
+  pills.forEach(x => x.classList.remove('active','active-all'));
+  activeUnit = p.dataset.unit;
+  if(activeUnit === 'all') p.classList.add('active-all');
+  else p.classList.add('active');
+  filterSections();
+}));
+pills[0].classList.add('active-all');
+
+function filterSections(){
+  const sections = document.querySelectorAll('.unit-section');
+  sections.forEach(s => {
+    if(activeUnit === 'all' || s.dataset.unit === activeUnit){
+      s.style.display = '';
+    } else {
+      s.style.display = 'none';
+    }
+  });
+  updateCount();
+}
+
+/* ── SEARCH ────────────────────────────────────── */
+const searchInput = document.getElementById('searchInput');
+const searchCount = document.getElementById('search-count');
+
+searchInput.addEventListener('input', debounce(doSearch, 200));
+
+function doSearch(){
+  const q = searchInput.value.trim().toLowerCase();
+  const items = document.querySelectorAll('.q-item');
+  let visible = 0;
+
+  if(!q){
+    items.forEach(item => {
+      item.style.display = '';
+      const qtxt = item.querySelector('.q-text');
+      if(qtxt) qtxt.innerHTML = qtxt.textContent;
+    });
+    document.querySelectorAll('.questions-list').forEach(l => {
+      if(l.classList.contains('open')) return;
+      l.classList.remove('open');
+    });
+    searchCount.textContent = '';
+    document.getElementById('empty-state').classList.remove('show');
+    filterSections();
+    return;
+  }
+
+  document.querySelectorAll('.unit-section').forEach(s => s.style.display = '');
+  document.querySelectorAll('.topic-group').forEach(g => {
+    const btn = g.querySelector('.topic-toggle');
+    const list = g.querySelector('.questions-list');
+    let groupVisible = 0;
+    g.querySelectorAll('.q-item').forEach(item => {
+      const qtxt = item.querySelector('.q-text');
+      const aInner = item.querySelector('.answer-inner');
+      const qText = qtxt ? qtxt.textContent.toLowerCase() : '';
+      const aText = aInner ? aInner.textContent.toLowerCase() : '';
+      if(qText.includes(q) || aText.includes(q)){
+        item.style.display = '';
+        groupVisible++;
+        visible++;
+        if(qtxt){
+          qtxt.innerHTML = highlight(qtxt.textContent, q);
+        }
+      } else {
+        item.style.display = 'none';
+        if(qtxt) qtxt.innerHTML = qtxt.textContent;
+      }
+    });
+    if(groupVisible > 0){
+      g.style.display = '';
+      btn.classList.add('open');
+      list.classList.add('open');
+    } else {
+      g.style.display = 'none';
+    }
+  });
+
+  searchCount.textContent = visible > 0 ? `${visible} result${visible>1?'s':''} found` : '';
+  document.getElementById('empty-state').classList.toggle('show', visible === 0);
+}
+
+function highlight(text, q){
+  const re = new RegExp(`(${escapeRe(q)})`, 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+function escapeRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+
+/* ── EXPAND ALL ────────────────────────────────── */
+let allExpanded = false;
+function toggleAll(){
+  allExpanded = !allExpanded;
+  document.querySelectorAll('.topic-toggle').forEach(btn => {
+    btn.classList.toggle('open', allExpanded);
+    btn.nextElementSibling.classList.toggle('open', allExpanded);
+  });
+  showToast(allExpanded ? 'All expanded' : 'All collapsed');
+}
+
+/* ── SCROLL TOP ────────────────────────────────── */
+function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+
+/* ── PROGRESS ──────────────────────────────────── */
+function updateProgress(){
+  const total = document.querySelectorAll('.q-trigger').length;
+  const opened = document.querySelectorAll('.q-trigger.open').length;
+  document.getElementById('prog-text').textContent = `${opened} / ${total} opened`;
+  document.getElementById('prog-fill').style.width = total ? (opened/total*100)+'%' : '0%';
+}
+updateProgress();
+
+function updateCount(){
+  const total = document.querySelectorAll('.q-item:not([style*="none"])').length;
+  searchCount.textContent = '';
+}
+
+/* ── TOAST ─────────────────────────────────────── */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+/* ── DEBOUNCE ──────────────────────────────────── */
+function debounce(fn, ms){
+  let t;
+  return function(...args){
+    clearTimeout(t);
+    t = setTimeout(()=>fn.apply(this,args),ms);
+  };
+}
+</script>
+</body>
+</html>
