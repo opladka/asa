@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CNS Prep Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.12);
+    --amber-glow: rgba(245,166,35,0.25);
+    --teal: #3dd6c8;
+    --teal-dim: rgba(61,214,200,0.1);
+    --red: #ff5c5c;
+    --red-dim: rgba(255,92,92,0.1);
+    --green: #4cde8c;
+    --green-dim: rgba(76,222,140,0.1);
+    --text: #e8eaf0;
+    --text-muted: #6b7280;
+    --text-dim: #9ca3af;
+    --grid: rgba(255,255,255,0.025);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid paper background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border2);
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 180px;
+    height: 2px;
+    background: var(--amber);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--amber);
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,166,35,0.3);
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin-bottom: 20px;
+  }
+
+  .badge::before { content: '◆'; font-size: 8px; }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 7vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #ffffff 30%, var(--amber) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .hero-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 32px;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--amber);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* SECTION HEADERS */
+  .section {
+    margin-top: 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* VIDEO CARDS */
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 12px;
+  }
+
+  .video-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 16px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .video-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--amber);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .video-card:hover {
+    border-color: rgba(245,166,35,0.4);
+    background: var(--surface2);
+    transform: translateY(-2px);
+  }
+
+  .video-card:hover::before { transform: scaleX(1); }
+
+  .vid-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,166,35,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  .vid-body { flex: 1; min-width: 0; }
+
+  .vid-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+  }
+
+  .vid-title {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  .vid-arrow {
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .video-card:hover .vid-arrow { color: var(--amber); }
+
+  /* UNIT BLOCKS */
+  .unit-block {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .unit-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .unit-header:hover { background: var(--surface2); }
+
+  .unit-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .unit-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #0a0c10;
+    background: var(--amber);
+    border-radius: 4px;
+    padding: 3px 8px;
+  }
+
+  .unit-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .unit-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .unit-chevron {
+    font-size: 12px;
+    color: var(--text-muted);
+    transition: transform 0.25s;
+  }
+
+  .unit-block.open .unit-chevron { transform: rotate(180deg); }
+
+  .unit-body {
+    display: none;
+    padding: 8px 0;
+  }
+
+  .unit-block.open .unit-body { display: block; }
+
+  .topic-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    cursor: pointer;
+  }
+
+  .topic-row:last-child { border-bottom: none; }
+  .topic-row:hover { background: var(--surface2); }
+  .topic-row.checked { opacity: 0.55; }
+
+  .topic-cb {
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid var(--border2);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s;
+    background: transparent;
+  }
+
+  .topic-row.checked .topic-cb {
+    background: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .checkmark { display: none; font-size: 10px; color: #0a0c10; font-weight: 700; }
+  .topic-row.checked .checkmark { display: block; }
+
+  .topic-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    min-width: 22px;
+    padding-top: 2px;
+  }
+
+  .topic-text {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    flex: 1;
+    transition: color 0.12s;
+  }
+
+  .topic-row:hover .topic-text { color: var(--text); }
+  .topic-row.checked .topic-text { color: var(--text-muted); text-decoration: line-through; }
+
+  .star {
+    font-size: 11px;
+    color: var(--amber);
+    flex-shrink: 0;
+    padding-top: 3px;
+  }
+
+  /* SUB SECTIONS */
+  .sub-section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    background: var(--teal-dim);
+    border-left: 2px solid var(--teal);
+    padding: 6px 20px;
+    margin: 8px 0 4px;
+  }
+
+  .sub-section-label.red {
+    color: var(--red);
+    background: var(--red-dim);
+    border-left-color: var(--red);
+  }
+
+  /* RESOURCE CARDS */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .resource-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 20px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s, transform 0.15s, background 0.2s;
+  }
+
+  .resource-card:hover {
+    border-color: rgba(61,214,200,0.4);
+    background: var(--surface2);
+    transform: translateY(-2px);
+  }
+
+  .res-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .res-icon.pyq {
+    background: var(--red-dim);
+    border: 1px solid rgba(255,92,92,0.2);
+  }
+
+  .res-icon.pdf {
+    background: var(--green-dim);
+    border: 1px solid rgba(76,222,140,0.2);
+  }
+
+  .res-body { flex: 1; }
+
+  .res-type {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+  }
+
+  .res-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .res-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .res-arrow {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .resource-card:hover .res-arrow {
+    color: var(--teal);
+    transform: translateX(3px);
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 32px;
+  }
+
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .progress-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+
+  .progress-pct {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--amber);
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber) 0%, #ffcf6b 100%);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 600px) {
+    .stats-row { gap: 8px; }
+    .stat { padding: 10px 14px; }
+    .video-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="badge">EXAM PREP GUIDE</div>
+    <h1>CNS</h1>
+    <p class="hero-sub">CIRCUIT &amp; NETWORK SCIENCE · END TERM PREP</p>
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-num">4</span>
+        <span class="stat-label">UNITS</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">35+</span>
+        <span class="stat-label">MUST-DO TOPICS</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">5</span>
+        <span class="stat-label">VIDEO LECTURES</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2</span>
+        <span class="stat-label">RESOURCES</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">TRACKER</span>
+      <span class="section-title">Your progress</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span class="progress-label">Topics completed</span>
+        <span class="progress-pct" id="pct-label">0 / 35</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="prog-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO LECTURES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">01</span>
+      <span class="section-title">Video Lectures</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="video-grid">
+      <a href="https://www.youtube.com/watch?v=YS4-1OgEyeQ&list=PLlg3g5kppv-9jBrSJxTWzDWD-2p7mK15g&index=6" target="_blank" class="video-card">
+        <div class="vid-icon">▶</div>
+        <div class="vid-body">
+          <div class="vid-label">UNIT 1</div>
+          <div class="vid-title">Signals, Laplace, Z-Transform</div>
+        </div>
+        <span class="vid-arrow">↗</span>
+      </a>
+      <a href="https://www.youtube.com/watch?v=5ZuF3g_DUUY&list=PLlg3g5kppv-9jBrSJxTWzDWD-2p7mK15g&index=5" target="_blank" class="video-card">
+        <div class="vid-icon">▶</div>
+        <div class="vid-body">
+          <div class="vid-label">UNIT 2</div>
+          <div class="vid-title">Circuit Analysis &amp; Transient Response</div>
+        </div>
+        <span class="vid-arrow">↗</span>
+      </a>
+      <a href="https://www.youtube.com/watch?v=_CnO5N7KGfg&list=PLlg3g5kppv-9jBrSJxTWzDWD-2p7mK15g&index=1" target="_blank" class="video-card">
+        <div class="vid-icon">▶</div>
+        <div class="vid-body">
+          <div class="vid-label">UNIT 3</div>
+          <div class="vid-title">Network Theorems &amp; Two-Port Networks</div>
+        </div>
+        <span class="vid-arrow">↗</span>
+      </a>
+      <a href="https://www.youtube.com/watch?v=8UnrG1b8wq8&list=PLlg3g5kppv-9jBrSJxTWzDWD-2p7mK15g&index=2" target="_blank" class="video-card">
+        <div class="vid-icon">▶</div>
+        <div class="vid-body">
+          <div class="vid-label">UNIT 4</div>
+          <div class="vid-title">Graph Theory &amp; Network Topology</div>
+        </div>
+        <span class="vid-arrow">↗</span>
+      </a>
+      <a href="https://www.youtube.com/watch?v=ReSBDsP7W1E&list=PLlg3g5kppv-9jBrSJxTWzDWD-2p7mK15g&index=4" target="_blank" class="video-card">
+        <div class="vid-icon">▶</div>
+        <div class="vid-body">
+          <div class="vid-label">MRQ</div>
+          <div class="vid-title">Most Repeated Questions</div>
+        </div>
+        <span class="vid-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">02</span>
+      <span class="section-title">Must-Do Topics</span>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- UNIT 1 -->
+    <div class="unit-block open" id="block-u1">
+      <div class="unit-header" onclick="toggleUnit('block-u1')">
+        <div class="unit-header-left">
+          <span class="unit-chip">U1</span>
+          <span class="unit-name">Signals, Systems &amp; Transforms</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="unit-count">11 topics</span>
+          <span class="unit-chevron">▼</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">01</span><span class="topic-text">Types of signals</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">02</span><span class="topic-text">Types of systems</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">03</span><span class="topic-text">Standard signals — unit step, ramp, impulse, etc.</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">04</span><span class="topic-text">Graph analysis</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">05</span><span class="topic-text">Laplace transform — revise all formulas</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">06</span><span class="topic-text">Solving differential equations using Laplace</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">07</span><span class="topic-text">Final value theorem &amp; initial value theorem</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">08</span><span class="topic-text">Laplace properties — time shift, freq shift, differentiation, integration</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">09</span><span class="topic-text">Z-transform and its properties</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">10</span><span class="topic-text">LTI system and properties</span><span class="star">★</span></div>
+      </div>
+    </div>
+
+    <!-- UNIT 2 -->
+    <div class="unit-block open" id="block-u2">
+      <div class="unit-header" onclick="toggleUnit('block-u2')">
+        <div class="unit-header-left">
+          <span class="unit-chip">U2</span>
+          <span class="unit-name">Circuit Analysis &amp; Transient Response</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="unit-count">4 topics</span>
+          <span class="unit-chevron">▼</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">01</span><span class="topic-text">Circuit analysis using Laplace transform</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">02</span><span class="topic-text">Circuit analysis using classical method</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">03</span><span class="topic-text">Transient response — RL, RC, series &amp; parallel RLC circuits</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">04</span><span class="topic-text">Step response — RL, RC, RLC circuits</span></div>
+      </div>
+    </div>
+
+    <!-- UNIT 3 & 4 - Short Answer -->
+    <div class="unit-block open" id="block-u34s">
+      <div class="unit-header" onclick="toggleUnit('block-u34s')">
+        <div class="unit-header-left">
+          <span class="unit-chip" style="background:var(--teal);color:#0a0c10;">U3·4</span>
+          <span class="unit-name">Network Theory — Short Answer</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="unit-count">13 topics</span>
+          <span class="unit-chevron">▼</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="sub-section-label">★ SHORT ANSWER TYPE</div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">01</span><span class="topic-text">Impedance and admittance</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">02</span><span class="topic-text">Types of power — real, reactive, apparent</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">03</span><span class="topic-text">Statements for Thevenin's &amp; Norton's theorem</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">04</span><span class="topic-text">Star to delta &amp; delta to star conversion</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">05</span><span class="topic-text">Condition for resonance</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">06</span><span class="topic-text">Filters — types and properties</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">07</span><span class="topic-text">Properties of tree in graph theory</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">08</span><span class="topic-text">Conditions for reciprocity and symmetricity</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">09</span><span class="topic-text">Definition of all two-port parameters (Z, Y, h, ABCD)</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">10</span><span class="topic-text">Hurwitz polynomial — definition and properties</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">11</span><span class="topic-text">Difference between twigs and links</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">12</span><span class="topic-text">KCL and KVL equations using cut-set method</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">13</span><span class="topic-text">2-port network interconnection</span></div>
+      </div>
+    </div>
+
+    <!-- UNIT 3 & 4 - Long Answer -->
+    <div class="unit-block open" id="block-u34l">
+      <div class="unit-header" onclick="toggleUnit('block-u34l')">
+        <div class="unit-header-left">
+          <span class="unit-chip" style="background:var(--teal);color:#0a0c10;">U3·4</span>
+          <span class="unit-name">Network Theory — Long Answer / Numericals</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="unit-count">9 topics</span>
+          <span class="unit-chevron">▼</span>
+        </div>
+      </div>
+      <div class="unit-body">
+        <div class="sub-section-label red">★ LONG ANSWER / NUMERICAL TYPE</div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">01</span><span class="topic-text">Mesh analysis</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">02</span><span class="topic-text">Nodal analysis</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">03</span><span class="topic-text">Thevenin's theorem — numericals</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">04</span><span class="topic-text">Norton's theorem — numericals</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">05</span><span class="topic-text">Star to delta / delta to star — numericals</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">06</span><span class="topic-text">Formula-based resonance problems</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">07</span><span class="topic-text">Cut-set and tie-set matrix</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">08</span><span class="topic-text">Numericals on two-port parameters</span><span class="star">★</span></div>
+        <div class="topic-row" onclick="toggleTopic(this)"><div class="topic-cb"><span class="checkmark">✓</span></div><span class="topic-num">09</span><span class="topic-text">Interconversion of parameters</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">03</span>
+      <span class="section-title">Resources</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="resource-grid">
+      <a href="https://drive.google.com/file/d/1-2P_UqBRLjLMtF53eMnNMHbfPwgRvpB-/view" target="_blank" class="resource-card">
+        <div class="res-icon pyq">📋</div>
+        <div class="res-body">
+          <div class="res-type">PAST YEAR QUESTIONS</div>
+          <div class="res-name">PYQ End Term</div>
+          <div class="res-desc">Previous year question paper · Google Drive</div>
+        </div>
+        <span class="res-arrow">→</span>
+      </a>
+      <a href="https://drive.google.com/file/d/1ukksBjmkn8XxSl1aIyP3GT89eJjhfmXZ/view" target="_blank" class="resource-card">
+        <div class="res-icon pdf">📄</div>
+        <div class="res-body">
+          <div class="res-type">STUDY MATERIAL</div>
+          <div class="res-name">Aakash PDF</div>
+          <div class="res-desc">Reference notes &amp; solved examples · Google Drive</div>
+        </div>
+        <span class="res-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <p>★ = HIGH PRIORITY TOPIC &nbsp;·&nbsp; CLICK TOPICS TO MARK DONE &nbsp;·&nbsp; GOOD LUCK!</p>
+  </footer>
+</div>
+
+<script>
+  const TOTAL = 36;
+
+  function toggleUnit(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function toggleTopic(row) {
+    row.classList.toggle('checked');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const done = document.querySelectorAll('.topic-row.checked').length;
+    const total = document.querySelectorAll('.topic-row').length;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('pct-label').textContent = done + ' / ' + total;
+    document.getElementById('prog-fill').style.width = pct + '%';
+  }
+
+  updateProgress();
+</script>
+</body>
+</html>
